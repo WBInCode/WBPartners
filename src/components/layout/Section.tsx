@@ -31,16 +31,16 @@ export function Section({
       id={id}
       aria-label={ariaLabel || id}
       className={cn(
-        // Base styles - min-height zamiast fixed height dla lepszej responsywności
-        'min-h-screen overflow-hidden snap-start',
+        // Base styles - fixed height dla snap scroll
+        'h-screen overflow-hidden snap-start',
         // Flex centering
         'flex items-center justify-center',
-        // Responsive padding: mobile (16px) → tablet (32px) → desktop (48px)
-        'px-4 sm:px-6 md:px-8 lg:px-12 xl:px-16',
+        // Responsive padding: mobile (12px) → tablet (24px) → desktop (48px)
+        'px-3 sm:px-4 md:px-6 lg:px-10 xl:px-16',
         // Dodatkowy padding po prawej dla scroll indicator na desktop
-        'lg:pr-20',
+        'lg:pr-16',
         // Padding top dla sticky header - responsywny
-        'pt-[72px] pb-8 md:pb-12',
+        'pt-16 sm:pt-18 md:pt-20 pb-4 sm:pb-6 md:pb-8',
         // Custom classes
         className
       )}

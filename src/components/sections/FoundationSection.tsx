@@ -2,24 +2,13 @@ import { Section } from '../layout/Section';
 import { SectionHeader } from '../ui/SectionHeader';
 import { AnimatedChipGroup } from '../ui/AnimatedChipGroup';
 import { Button } from '../ui/Button';
-import { FeatureCard } from '../ui/FeatureCard';
-import { TiltCard } from '../ui/TiltCard';
 import { AnimatedBackground } from '../ui/AnimatedBackground';
 import { SceneWrapper, FoundationScene } from '../3d';
-import { Heart, GraduationCap, Users, Award } from 'lucide-react';
 import wbFoundationLogo from '../../assets/wb-foundation-logo.png';
 
 interface FoundationSectionProps {
   onNavigate?: (sectionId: string) => void;
 }
-
-// Features dla Foundation
-const FOUNDATION_FEATURES = [
-  { icon: Heart, title: 'CSR', description: 'Społeczna odpowiedzialność biznesu w praktyce.' },
-  { icon: GraduationCap, title: 'Edukacja', description: 'Programy edukacyjne i warsztaty dla młodzieży.' },
-  { icon: Users, title: 'Społeczność', description: 'Budowanie lokalnych społeczności i sieci wsparcia.' },
-  { icon: Award, title: 'Mentoring', description: 'Programy mentoringowe dla startupów i młodych.' },
-];
 
 /**
  * Sekcja WB Foundation
@@ -40,9 +29,9 @@ export function FoundationSection({ onNavigate }: FoundationSectionProps) {
         opacity={0.4}
       />
 
-      <div className="grid lg:grid-cols-2 gap-8 lg:gap-12 items-center h-full">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8 lg:gap-12 items-center">
         {/* Left: Content */}
-        <div className="max-w-xl">
+        <div className="max-w-xl mx-auto md:mx-0">
           <SectionHeader
             title="WB Foundation"
             subtitle="Wspieramy przyszłość, inwestujemy w ludzi"
@@ -79,32 +68,11 @@ export function FoundationSection({ onNavigate }: FoundationSectionProps) {
         </div>
 
         {/* Right: 3D Scene */}
-        <div className="hidden lg:flex justify-center lg:justify-end">
-          <SceneWrapper className="w-full max-w-md aspect-square" fallbackColor="#8FD2E9">
+        <div className="hidden md:flex justify-center md:justify-end">
+          <SceneWrapper className="w-full max-w-[280px] md:max-w-[320px] lg:max-w-md aspect-square" fallbackColor="#8FD2E9">
             <FoundationScene />
           </SceneWrapper>
         </div>
-      </div>
-
-      {/* Feature cards with TiltCard */}
-      <div className="mt-8 lg:mt-12 grid grid-cols-2 lg:grid-cols-4 gap-4">
-        {FOUNDATION_FEATURES.map((feature, i) => (
-          <TiltCard
-            key={feature.title}
-            maxTilt={12}
-            scale={1.03}
-            accentColor="#8FD2E9"
-            className="rounded-xl"
-          >
-            <FeatureCard
-              icon={feature.icon}
-              title={feature.title}
-              description={feature.description}
-              accentColor={accentColor}
-              delay={i * 0.1}
-            />
-          </TiltCard>
-        ))}
       </div>
     </Section>
   );

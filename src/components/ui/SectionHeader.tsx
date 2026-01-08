@@ -44,17 +44,17 @@ export function SectionHeader({
       };
 
   return (
-    <div className={cn('mb-8', className)}>
+    <div className={cn('mb-6 md:mb-8', className)}>
       {/* Logo - above title */}
       {logoSrc && (
         <motion.div
           {...animationProps}
-          className="mb-6"
+          className="mb-4 md:mb-6"
         >
           <img 
             src={logoSrc} 
             alt={logoAlt || title} 
-            className="h-16 md:h-20 lg:h-24 w-auto object-contain"
+            className="h-12 sm:h-14 md:h-20 lg:h-24 w-auto object-contain"
           />
         </motion.div>
       )}
@@ -64,9 +64,9 @@ export function SectionHeader({
         {...animationProps}
         className={cn(
           // Responsywna typografia
-          'text-4xl md:text-5xl lg:text-6xl',
+          'text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl',
           'font-bold',
-          'mb-4'
+          'mb-2 md:mb-4'
         )}
         style={titleColor ? { color: titleColor } : { color: 'var(--wb-primary)' }}
       >
@@ -79,9 +79,9 @@ export function SectionHeader({
           {...animationProps}
           transition={{ delay: 0.1 }}
           className={cn(
-            'text-xl md:text-2xl',
+            'text-base sm:text-lg md:text-xl lg:text-2xl',
             'text-[var(--wb-secondary)]',
-            'mb-4'
+            'mb-2 md:mb-4'
           )}
         >
           {subtitle}
@@ -94,7 +94,7 @@ export function SectionHeader({
           {...animationProps}
           transition={{ delay: 0.2 }}
           className={cn(
-            'text-base md:text-lg',
+            'text-sm sm:text-base md:text-lg',
             'text-gray-600',
             'max-w-2xl',
             'leading-relaxed'

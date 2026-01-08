@@ -39,10 +39,10 @@ export function AnimatedChip({
     muted: 'bg-gray-100 text-gray-600',
   };
 
-  // Size styles
+  // Size styles - responsywne
   const sizeStyles: Record<ChipSize, string> = {
-    sm: 'px-3 py-1.5 text-xs gap-1.5',
-    md: 'px-4 py-2 text-sm gap-2',
+    sm: 'px-2 sm:px-3 py-1 sm:py-1.5 text-xs gap-1 sm:gap-1.5',
+    md: 'px-2.5 sm:px-4 py-1.5 sm:py-2 text-xs sm:text-sm gap-1.5 sm:gap-2',
   };
 
   // Custom accent color styles

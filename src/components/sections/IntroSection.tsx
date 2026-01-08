@@ -2,7 +2,6 @@ import { Section } from '../layout/Section';
 import { SectionHeader } from '../ui/SectionHeader';
 import { AnimatedChipGroup } from '../ui/AnimatedChipGroup';
 import { Button } from '../ui/Button';
-import { StatsCounter } from '../ui/StatsCounter';
 import { AnimatedBackground } from '../ui/AnimatedBackground';
 import { SceneWrapper, IntroScene } from '../3d';
 import wbPartnersLogo from '../../assets/wb-partners-logo.png';
@@ -10,14 +9,6 @@ import wbPartnersLogo from '../../assets/wb-partners-logo.png';
 interface IntroSectionProps {
   onNavigate?: (sectionId: string) => void;
 }
-
-// Statystyki firmy
-const STATS = [
-  { value: 4, suffix: '', label: 'Marki w portfolio' },
-  { value: 50, suffix: '+', label: 'Zrealizowanych projektów' },
-  { value: 98, suffix: '%', label: 'Zadowolonych klientów' },
-  { value: 10, suffix: '+', label: 'Lat doświadczenia' },
-];
 
 /**
  * Sekcja Intro
@@ -42,9 +33,9 @@ export function IntroSection({ onNavigate }: IntroSectionProps) {
         opacity={0.3}
       />
 
-      <div className="grid lg:grid-cols-2 gap-8 lg:gap-12 items-center h-full">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8 lg:gap-12 items-center">
         {/* Left: Content */}
-        <div className="max-w-xl">
+        <div className="max-w-xl mx-auto md:mx-0">
           <SectionHeader
             title="WB Partners"
             subtitle="Budujemy marki i projekty, które rosną."
@@ -77,16 +68,11 @@ export function IntroSection({ onNavigate }: IntroSectionProps) {
         </div>
 
         {/* Right: 3D Scene */}
-        <div className="hidden lg:block h-[400px] lg:h-[500px]">
-          <SceneWrapper className="w-full h-full">
+        <div className="hidden md:block h-[300px] md:h-[350px] lg:h-[450px]">
+          <SceneWrapper className="w-full h-full max-w-[280px] md:max-w-[320px] lg:max-w-md mx-auto">
             <IntroScene />
           </SceneWrapper>
         </div>
-      </div>
-
-      {/* Stats row */}
-      <div className="mt-8 lg:mt-12 pt-8 border-t border-gray-200">
-        <StatsCounter stats={STATS} />
       </div>
     </Section>
   );

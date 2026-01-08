@@ -154,10 +154,10 @@ export function ContactForm() {
   };
 
   const inputClasses = cn(
-    'w-full px-4 py-3 rounded-lg',
+    'w-full px-3 py-2 rounded-lg',
     'border border-gray-300',
     'bg-white',
-    'text-gray-900 placeholder-gray-500',
+    'text-gray-900 placeholder-gray-500 text-sm',
     'transition-all duration-200',
     'focus:outline-none focus:ring-2 focus:ring-[var(--wb-primary)] focus:border-transparent'
   );
@@ -181,7 +181,7 @@ export function ContactForm() {
   }
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-5">
+    <form onSubmit={handleSubmit} className="space-y-3">
       {/* Honeypot field - hidden from users, catches bots */}
       <div className="absolute -left-[9999px]" aria-hidden="true">
         <input
@@ -195,14 +195,14 @@ export function ContactForm() {
       </div>
       
       {/* Imię i Email - 2 kolumny na tablet+ */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
         {/* Imię */}
         <div>
           <label htmlFor="name" className="block text-sm font-medium text-gray-700 mb-1">
             Imię
           </label>
           <div className="relative">
-            <User className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400 pointer-events-none" />
+            <User className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400 pointer-events-none" />
             <input
               type="text"
               id="name"
@@ -225,7 +225,7 @@ export function ContactForm() {
             Email
           </label>
           <div className="relative">
-            <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400 pointer-events-none" />
+            <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400 pointer-events-none" />
             <input
               type="email"
               id="email"
@@ -249,7 +249,7 @@ export function ContactForm() {
           Temat
         </label>
         <div className="relative">
-          <FileText className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400 pointer-events-none" />
+          <FileText className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400 pointer-events-none" />
           <input
             type="text"
             id="subject"
@@ -272,11 +272,11 @@ export function ContactForm() {
           Wiadomość
         </label>
         <div className="relative">
-          <MessageSquare className="absolute left-3 top-4 w-5 h-5 text-gray-400 pointer-events-none" />
+          <MessageSquare className="absolute left-3 top-3 w-4 h-4 text-gray-400 pointer-events-none" />
           <textarea
             id="message"
             name="message"
-            rows={5}
+            rows={3}
             value={formData.message}
             onChange={handleChange}
             onBlur={handleBlur}
@@ -293,11 +293,11 @@ export function ContactForm() {
       <Button
         type="submit"
         variant="primary"
-        size="lg"
+        size="md"
         loading={isLoading}
         disabled={isLoading}
         className="w-full"
-        iconRight={<Send className="w-5 h-5" />}
+        iconRight={<Send className="w-4 h-4" />}
       >
         Wyślij wiadomość
       </Button>

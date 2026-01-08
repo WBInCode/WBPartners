@@ -1,219 +1,275 @@
 import { useRef, useMemo } from 'react';
 import { useFrame } from '@react-three/fiber';
-import { Float, RoundedBox } from '@react-three/drei';
+import { RoundedBox } from '@react-three/drei';
 import type { Group, Mesh } from 'three';
 
 /**
- * RentScene - Profesjonalna scena 3D dla WB Rent
- * - Miasto 3D z wieloma budynkami
- * - Animowany klucz premium
- * - Lokalizacja pin
- * - Efekty świetlne reprezentujące wartość
+ * RentScene - Tablet/Panel 3D dla WB Rent
+ * - Panel rezerwacji z animowanymi elementami
+ * - Animowane particles w tle (złote kulki)
+ * - Spójny styl z InCodeScene
  */
-export function RentScene() {
-  const groupRef = useRef<Group>(null);
-  const keyRef = useRef<Group>(null);
-  const pinRef = useRef<Mesh>(null);
 
-  // Budynki w mieście
-  const buildings = useMemo(() => [
-    { pos: [0, 0, 0] as [number, number, number], size: [0.8, 2.2, 0.6] as [number, number, number], color: '#D6AF5B' },
-    { pos: [-1.3, -0.3, 0.3] as [number, number, number], size: [0.6, 1.6, 0.5] as [number, number, number], color: '#C9A043' },
-    { pos: [1.2, -0.5, 0.2] as [number, number, number], size: [0.5, 1.2, 0.4] as [number, number, number], color: '#B8942D' },
-    { pos: [-0.5, -0.6, 0.8] as [number, number, number], size: [0.4, 1, 0.35] as [number, number, number], color: '#E5C66B' },
-    { pos: [0.7, -0.4, 0.7] as [number, number, number], size: [0.45, 1.4, 0.4] as [number, number, number], color: '#D6AF5B' },
-  ], []);
+// Kolory WB Rent
+const COLORS = {
+  gold: '#D6AF5B',
+  goldDark: '#B8942D',
+  goldLight: '#E5C66B',
+  accent: '#4A78AB',
+  dark: '#1a1a2e',
+};
+
+// Elementy listy wypożyczeń z nazwami
+const RENTAL_ITEMS = [
+  { name: 'MacBook Pro 16"', w: 0.55, color: COLORS.gold },
+  { name: 'Dell XPS 15', w: 0.4, color: COLORS.goldDark },
+  { name: 'Monitor 4K 27"', w: 0.5, color: COLORS.goldLight },
+  { name: 'Drukarka HP', w: 0.4, color: COLORS.gold },
+  { name: 'Projektor Epson', w: 0.5, color: COLORS.goldDark },
+  { name: 'Serwer Dell', w: 0.35, color: COLORS.goldLight },
+];
+
+// Konfiguracja animacji - wolniejsza, płynniejsza
+const ITEM_APPEAR_SPEED = 2; // elementów na sekundę (wolniej)
+const CHECK_DELAY = 0.4; // sekundy między zaznaczeniami
+const PAUSE_DURATION = 3; // pauza po zakończeniu
+const TOTAL_DURATION = (RENTAL_ITEMS.length / ITEM_APPEAR_SPEED) + (RENTAL_ITEMS.length * CHECK_DELAY) + PAUSE_DURATION;
+
+// Easing function
+function easeOutCubic(x: number): number {
+  return 1 - Math.pow(1 - x, 3);
+}
+
+// Animowane particles w tle
+function BackgroundParticles() {
+  const particlesRef = useRef<Group>(null);
+  
+  const particles = useMemo(() => {
+    return [...Array(30)].map(() => ({
+      x: (Math.random() - 0.5) * 6,
+      y: (Math.random() - 0.5) * 4,
+      z: -0.5 - Math.random() * 1,
+      speed: 0.3 + Math.random() * 0.4,
+      size: 0.03 + Math.random() * 0.04,
+      offset: Math.random() * Math.PI * 2,
+    }));
+  }, []);
 
   useFrame((state) => {
+    if (particlesRef.current) {
+      const t = state.clock.elapsedTime;
+      particlesRef.current.children.forEach((child, i) => {
+        const p = particles[i];
+        if (p && child) {
+          child.position.y = p.y + Math.sin(t * p.speed + p.offset) * 0.3;
+          child.position.x = p.x + Math.cos(t * p.speed * 0.6 + p.offset) * 0.2;
+          const scale = p.size * (1 + Math.sin(t * 1.5 + p.offset) * 0.25);
+          child.scale.setScalar(scale);
+        }
+      });
+    }
+  });
+
+  return (
+    <group ref={particlesRef}>
+      {particles.map((p, i) => (
+        <mesh key={i} position={[p.x, p.y, p.z]}>
+          <sphereGeometry args={[1, 10, 10]} />
+          <meshStandardMaterial
+            color={COLORS.gold}
+            emissive={COLORS.gold}
+            emissiveIntensity={0.5}
+            transparent
+            opacity={0.6}
+          />
+        </mesh>
+      ))}
+    </group>
+  );
+}
+
+// Animowana lista wypożyczeń - płynna animacja
+function AnimatedRentalList() {
+  // Refs dla wszystkich elementów
+  const itemRefs = useRef<Map<string, Mesh | Group>>(new Map());
+  
+  useFrame((state) => {
     const t = state.clock.elapsedTime;
+    const cycleTime = t % TOTAL_DURATION;
     
+    // Faza 1: Pojawianie się elementów z płynnym fade-in
+    const appearTime = RENTAL_ITEMS.length / ITEM_APPEAR_SPEED;
+    const rawVisibleCount = cycleTime * ITEM_APPEAR_SPEED;
+    const visibleCount = Math.min(RENTAL_ITEMS.length, Math.floor(rawVisibleCount));
+    
+    // Faza 2: Zaznaczanie checkboxów (po pojawieniu się wszystkich)
+    const checkStartTime = appearTime + 0.3; // mała pauza przed checkboxami
+    const checksVisible = cycleTime > checkStartTime 
+      ? Math.min(RENTAL_ITEMS.length, Math.floor((cycleTime - checkStartTime) / CHECK_DELAY))
+      : 0;
+    
+    // Aktualizuj widoczność i animacje
+    for (let i = 0; i < RENTAL_ITEMS.length; i++) {
+      const row = itemRefs.current.get(`row-${i}`);
+      if (row) {
+        const shouldBeVisible = i < visibleCount;
+        row.visible = shouldBeVisible || i === visibleCount;
+        
+        // Płynne pojawianie się
+        if (i === visibleCount && rawVisibleCount > i) {
+          const progress = easeOutCubic(rawVisibleCount - i);
+          row.scale.setScalar(progress);
+          row.position.x = (1 - progress) * 0.1; // slide in od prawej
+        } else if (shouldBeVisible) {
+          row.scale.setScalar(1);
+          row.position.x = 0;
+        }
+      }
+      
+      // Widoczność checkboxa z animacją
+      const check = itemRefs.current.get(`check-${i}`);
+      if (check) {
+        const shouldCheck = i < checksVisible;
+        check.visible = shouldCheck;
+        
+        // Animacja "pop" przy zaznaczeniu
+        if (shouldCheck) {
+          const checkIndex = i;
+          const checkTime = checkStartTime + checkIndex * CHECK_DELAY;
+          const timeSinceCheck = cycleTime - checkTime;
+          
+          if (timeSinceCheck < 0.15) {
+            const popProgress = timeSinceCheck / 0.15;
+            const pop = 1 + Math.sin(popProgress * Math.PI) * 0.3;
+            check.scale.setScalar(pop);
+          } else {
+            check.scale.setScalar(1);
+          }
+        }
+      }
+    }
+  });
+  
+  return (
+    <group>
+      {RENTAL_ITEMS.map((item, i) => {
+        const yPos = 0.32 - i * 0.11;
+        
+        return (
+          <group 
+            key={i} 
+            ref={(el) => { if (el) itemRefs.current.set(`row-${i}`, el); }}
+            visible={false}
+          >
+            {/* Checkbox */}
+            <group position={[-0.88, yPos, 0.06]}>
+              <mesh>
+                <boxGeometry args={[0.055, 0.055, 0.01]} />
+                <meshStandardMaterial color="#2a2a3a" />
+              </mesh>
+              <mesh 
+                ref={(el) => { if (el) itemRefs.current.set(`check-${i}`, el); }}
+                position={[0, 0, 0.008]} 
+                visible={false}
+              >
+                <boxGeometry args={[0.032, 0.032, 0.005]} />
+                <meshStandardMaterial color={COLORS.gold} emissive={COLORS.gold} emissiveIntensity={0.6} />
+              </mesh>
+            </group>
+            
+            {/* Nazwa produktu (prostokąt) */}
+            <mesh position={[-0.48 + item.w / 2, yPos, 0.06]}>
+              <boxGeometry args={[item.w, 0.05, 0.008]} />
+              <meshStandardMaterial
+                color={item.color}
+                emissive={item.color}
+                emissiveIntensity={0.25}
+                roughness={0.4}
+              />
+            </mesh>
+            
+            {/* Ilość/dostępność */}
+            <mesh position={[0.38, yPos, 0.06]}>
+              <boxGeometry args={[0.14, 0.035, 0.008]} />
+              <meshStandardMaterial color="#3a3a4a" />
+            </mesh>
+            
+            {/* Cena/status */}
+            <mesh position={[0.68, yPos, 0.06]}>
+              <boxGeometry args={[0.2, 0.035, 0.008]} />
+              <meshStandardMaterial
+                color={COLORS.accent}
+                emissive={COLORS.accent}
+                emissiveIntensity={0.15}
+              />
+            </mesh>
+          </group>
+        );
+      })}
+    </group>
+  );
+}
+
+export function RentScene() {
+  const groupRef = useRef<Group>(null);
+
+  // Delikatna rotacja
+  useFrame((state) => {
     if (groupRef.current) {
-      groupRef.current.rotation.y = Math.sin(t * 0.2) * 0.2;
-    }
-
-    if (keyRef.current) {
-      keyRef.current.rotation.z = Math.sin(t * 1.5) * 0.15;
-      keyRef.current.position.y = 0.8 + Math.sin(t * 2) * 0.1;
-    }
-
-    if (pinRef.current) {
-      pinRef.current.position.y = 1.8 + Math.sin(t * 2.5) * 0.15;
+      const t = state.clock.elapsedTime;
+      groupRef.current.rotation.y = Math.sin(t * 0.2) * 0.06;
+      groupRef.current.rotation.x = Math.sin(t * 0.15) * 0.02;
     }
   });
 
   return (
     <>
       {/* Oświetlenie */}
-      <ambientLight intensity={0.4} />
-      <directionalLight position={[5, 10, 5]} intensity={1.3} color="#ffffff" />
-      <pointLight position={[0, 3, 3]} intensity={1} color="#D6AF5B" />
-      <pointLight position={[-3, 1, 2]} intensity={0.5} color="#B8942D" />
-      <spotLight position={[0, 5, 0]} intensity={0.5} angle={0.5} color="#FFF8E7" />
+      <ambientLight intensity={0.5} />
+      <directionalLight position={[5, 5, 5]} intensity={0.8} color="#ffffff" />
+      <pointLight position={[0, 0, 3]} intensity={0.5} color={COLORS.gold} />
+
+      {/* Animowane particles w tle */}
+      <BackgroundParticles />
 
       <group ref={groupRef}>
-        {/* Platforma/podstawa miasta */}
-        <mesh position={[0, -1.3, 0.3]} rotation={[-0.1, 0, 0]}>
-          <cylinderGeometry args={[2.5, 2.8, 0.15, 32]} />
-          <meshStandardMaterial 
-            color="#1a1a2e" 
-            roughness={0.8} 
-            metalness={0.3}
-          />
-        </mesh>
+        {/* Panel/Tablet 3D */}
+        <group position={[0, 0, 0]}>
+          {/* Ramka tabletu */}
+          <RoundedBox args={[2.3, 1.5, 0.1]} radius={0.06}>
+            <meshStandardMaterial color="#1e1e2e" roughness={0.7} metalness={0.2} />
+          </RoundedBox>
+          
+          {/* Ekran */}
+          <mesh position={[0, -0.03, 0.055]}>
+            <planeGeometry args={[2.1, 1.28]} />
+            <meshStandardMaterial color="#0d1117" roughness={0.95} />
+          </mesh>
 
-        {/* Budynki */}
-        {buildings.map((building, i) => (
-          <Float key={i} speed={1 + i * 0.2} rotationIntensity={0.05} floatIntensity={0.1}>
-            <group position={building.pos}>
-              {/* Korpus budynku */}
-              <RoundedBox 
-                args={building.size} 
-                radius={0.03}
-                position={[0, building.size[1] / 2 - 1, 0]}
-              >
-                <meshStandardMaterial 
-                  color={building.color} 
-                  roughness={0.4} 
-                  metalness={0.3}
-                />
-              </RoundedBox>
-              
-              {/* Okna - kilka rzędów */}
-              {[...Array(Math.floor(building.size[1] * 2))].map((_, row) => (
-                <group key={row}>
-                  <mesh position={[-building.size[0] * 0.25, building.size[1] / 2 - 1 - 0.3 - row * 0.4, building.size[2] / 2 + 0.01]}>
-                    <boxGeometry args={[building.size[0] * 0.25, 0.2, 0.02]} />
-                    <meshStandardMaterial 
-                      color="#1a1a2e" 
-                      emissive="#4A78AB"
-                      emissiveIntensity={Math.random() > 0.5 ? 0.3 : 0}
-                      roughness={0.1} 
-                      metalness={0.9} 
-                    />
-                  </mesh>
-                  <mesh position={[building.size[0] * 0.25, building.size[1] / 2 - 1 - 0.3 - row * 0.4, building.size[2] / 2 + 0.01]}>
-                    <boxGeometry args={[building.size[0] * 0.25, 0.2, 0.02]} />
-                    <meshStandardMaterial 
-                      color="#1a1a2e"
-                      emissive="#D6AF5B"
-                      emissiveIntensity={Math.random() > 0.5 ? 0.2 : 0}
-                      roughness={0.1} 
-                      metalness={0.9} 
-                    />
-                  </mesh>
-                </group>
-              ))}
-            </group>
-          </Float>
-        ))}
+          {/* Pasek tytułowy */}
+          <mesh position={[0, 0.6, 0.055]}>
+            <planeGeometry args={[2.1, 0.12]} />
+            <meshStandardMaterial color={COLORS.goldDark} roughness={0.5} />
+          </mesh>
 
-        {/* Pin lokalizacji */}
-        <Float speed={2} floatIntensity={0.3}>
-          <group position={[0, 0, 0]}>
-            <mesh ref={pinRef} position={[0, 1.8, 0]}>
-              {/* Główka pina */}
-              <sphereGeometry args={[0.2, 32, 32]} />
-              <meshStandardMaterial 
-                color="#D6AF5B" 
-                emissive="#D6AF5B"
-                emissiveIntensity={0.4}
-                roughness={0.2} 
-                metalness={0.7} 
-              />
-            </mesh>
-            <mesh position={[0, 1.5, 0]}>
-              {/* Szpic pina */}
-              <coneGeometry args={[0.12, 0.4, 16]} />
-              <meshStandardMaterial 
-                color="#D6AF5B" 
-                emissive="#D6AF5B"
-                emissiveIntensity={0.3}
-                roughness={0.2} 
-                metalness={0.7} 
-              />
-            </mesh>
-            {/* Pierścień wokół pina */}
-            <mesh position={[0, 1.3, 0]} rotation={[Math.PI / 2, 0, 0]}>
-              <torusGeometry args={[0.35, 0.02, 16, 32]} />
-              <meshStandardMaterial 
-                color="#D6AF5B" 
-                transparent 
-                opacity={0.5}
-                emissive="#D6AF5B"
-                emissiveIntensity={0.3}
-              />
-            </mesh>
-          </group>
-        </Float>
+          {/* Ikona wypożyczalni w pasku */}
+          <mesh position={[-0.85, 0.6, 0.06]}>
+            <boxGeometry args={[0.08, 0.06, 0.01]} />
+            <meshStandardMaterial color="#fff" />
+          </mesh>
 
-        {/* Premium klucz */}
-        <Float speed={1.5} rotationIntensity={0.2} floatIntensity={0.4}>
-          <group ref={keyRef} position={[2.2, 0.8, 0.3]} rotation={[0, 0, -0.3]}>
-            {/* Główka klucza - ozdobna */}
-            <mesh>
-              <torusGeometry args={[0.3, 0.08, 16, 32]} />
-              <meshStandardMaterial 
-                color="#D6AF5B" 
-                roughness={0.15} 
-                metalness={0.9}
-                emissive="#D6AF5B"
-                emissiveIntensity={0.2}
-              />
-            </mesh>
-            {/* Dekoracja w główce */}
-            <mesh>
-              <torusGeometry args={[0.18, 0.03, 16, 32]} />
-              <meshStandardMaterial color="#B8942D" roughness={0.2} metalness={0.85} />
-            </mesh>
-            {/* Trzonek klucza */}
-            <mesh position={[0, -0.6, 0]}>
-              <boxGeometry args={[0.1, 0.8, 0.05]} />
-              <meshStandardMaterial 
-                color="#D6AF5B" 
-                roughness={0.15} 
-                metalness={0.9}
-                emissive="#D6AF5B"
-                emissiveIntensity={0.15}
-              />
-            </mesh>
-            {/* Zęby klucza */}
-            <mesh position={[0.12, -0.9, 0]}>
-              <boxGeometry args={[0.14, 0.1, 0.05]} />
-              <meshStandardMaterial color="#D6AF5B" roughness={0.15} metalness={0.9} />
-            </mesh>
-            <mesh position={[0.08, -0.75, 0]}>
-              <boxGeometry args={[0.1, 0.08, 0.05]} />
-              <meshStandardMaterial color="#D6AF5B" roughness={0.15} metalness={0.9} />
-            </mesh>
-            <mesh position={[0.1, -0.6, 0]}>
-              <boxGeometry args={[0.1, 0.06, 0.05]} />
-              <meshStandardMaterial color="#D6AF5B" roughness={0.15} metalness={0.9} />
-            </mesh>
-          </group>
-        </Float>
+          {/* Animowana lista wypożyczeń */}
+          <AnimatedRentalList />
 
-        {/* Złote monety/wartość */}
-        {[...Array(6)].map((_, i) => (
-          <Float key={i} speed={2.5 + i * 0.3} floatIntensity={0.6}>
-            <mesh 
-              position={[
-                Math.sin(i * 1.2) * 2.2,
-                -0.8 + Math.cos(i * 0.8) * 0.3,
-                Math.cos(i * 1.5) * 1.5
-              ]} 
-              rotation={[Math.PI / 2, 0, i * 0.5]}
-            >
-              <cylinderGeometry args={[0.12, 0.12, 0.04, 32]} />
-              <meshStandardMaterial 
-                color="#D6AF5B" 
-                roughness={0.1} 
-                metalness={0.95}
-                emissive="#D6AF5B"
-                emissiveIntensity={0.2}
-              />
-            </mesh>
-          </Float>
-        ))}
+          {/* Przycisk na dole */}
+          <RoundedBox args={[0.6, 0.12, 0.02]} radius={0.03} position={[0, -0.5, 0.06]}>
+            <meshStandardMaterial 
+              color={COLORS.gold} 
+              emissive={COLORS.gold}
+              emissiveIntensity={0.3}
+            />
+          </RoundedBox>
+        </group>
       </group>
     </>
   );

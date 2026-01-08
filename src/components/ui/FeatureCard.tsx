@@ -33,7 +33,7 @@ export function FeatureCard({
       className={cn(
         'relative group',
         'bg-white/80 backdrop-blur-sm',
-        'rounded-xl p-6',
+        'rounded-xl p-4 md:p-6',
         'border border-gray-100',
         'shadow-sm hover:shadow-lg',
         'transition-shadow duration-300'
@@ -47,18 +47,18 @@ export function FeatureCard({
       
       {/* Icon */}
       <div 
-        className="w-12 h-12 rounded-lg flex items-center justify-center mb-4"
+        className="w-10 h-10 md:w-12 md:h-12 rounded-lg flex items-center justify-center mb-3 md:mb-4"
         style={{ backgroundColor: `color-mix(in srgb, ${accentColor} 15%, transparent)` }}
       >
         <Icon 
-          className="w-6 h-6"
+          className="w-5 h-5 md:w-6 md:h-6"
           style={{ color: accentColor }}
         />
       </div>
       
       {/* Content */}
-      <h3 className="font-semibold text-gray-900 mb-2">{title}</h3>
-      <p className="text-sm text-gray-600 leading-relaxed">{description}</p>
+      <h3 className="font-semibold text-gray-900 mb-1 md:mb-2 text-sm md:text-base">{title}</h3>
+      <p className="text-xs md:text-sm text-gray-600 leading-relaxed">{description}</p>
     </motion.div>
   );
 }

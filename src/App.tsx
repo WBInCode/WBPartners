@@ -2,7 +2,6 @@ import { useCallback } from 'react'
 import './App.css'
 import { Navbar } from './components/layout/Navbar'
 import { ScrollIndicator } from './components/layout/ScrollIndicator'
-import { Footer } from './components/layout/Footer'
 import { ScrollProgress } from './components/ui/ScrollProgress'
 import { BackToTop } from './components/ui/BackToTop'
 import { useScrollToSection } from './hooks/useScrollToSection'
@@ -58,7 +57,6 @@ function App() {
         <RentSection onNavigate={handleNavigate} />
         <FoundationSection onNavigate={handleNavigate} />
         <ContactSection />
-        <Footer />
       </main>
     </div>
   )

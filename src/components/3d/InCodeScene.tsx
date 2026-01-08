@@ -1,252 +1,315 @@
 import { useRef, useMemo } from 'react';
 import { useFrame } from '@react-three/fiber';
-import { Float, RoundedBox } from '@react-three/drei';
-import type { Group } from 'three';
+import { RoundedBox } from '@react-three/drei';
+import type { Group, Mesh } from 'three';
 
 /**
- * InCodeScene - Profesjonalna scena 3D dla WB InCode
- * - Terminal 3D z kodem
- * - Symbole </> z animacją
- * - Połączone węzły reprezentujące architekturę
- * - Particles danych
+ * InCodeScene - Terminal 3D z animowanym kodem
+ * - Kolorowe prostokąty symulujące kod z efektem pisania
+ * - Animowane particles w tle
+ * - Migający kursor
  */
-export function InCodeScene() {
-  const groupRef = useRef<Group>(null);
-  const terminalRef = useRef<Group>(null);
-  const codeRef = useRef<Group>(null);
 
-  // Linie kodu - animowane
-  const codeLines = useMemo(() => [
-    { width: 1.2, color: '#52F066', delay: 0 },
-    { width: 0.8, color: '#3DD955', delay: 0.5 },
-    { width: 1.0, color: '#52F066', delay: 1 },
-    { width: 0.6, color: '#2BC93F', delay: 1.5 },
-    { width: 0.9, color: '#3DD955', delay: 2 },
-  ], []);
+// Kolory składni (One Dark theme)
+const COLORS = {
+  purple: '#C678DD',
+  blue: '#61AFEF',
+  yellow: '#E5C07B',
+  green: '#98C379',
+  red: '#E06C75',
+  gray: '#ABB2BF',
+};
 
-  // Węzły architektury
-  const nodes = useMemo(() => [
-    { pos: [1.8, 1, 0] as [number, number, number], connections: [1, 2] },
-    { pos: [2.5, 0, 0.5] as [number, number, number], connections: [2] },
-    { pos: [2, -1, 0] as [number, number, number], connections: [] },
-  ], []);
+// Linie kodu jako segmenty kolorowych prostokątów
+const CODE_LINES: { segments: { w: number; c: string; gap?: number }[] }[] = [
+  // import React from "react";
+  { segments: [{ w: 0.25, c: COLORS.purple }, { w: 0.2, c: COLORS.yellow, gap: 0.03 }, { w: 0.15, c: COLORS.purple, gap: 0.03 }, { w: 0.28, c: COLORS.green, gap: 0.03 }] },
+  // pusta
+  { segments: [] },
+  // function App() {
+  { segments: [{ w: 0.32, c: COLORS.purple }, { w: 0.15, c: COLORS.blue, gap: 0.03 }, { w: 0.08, c: COLORS.gray, gap: 0.02 }, { w: 0.03, c: COLORS.gray, gap: 0.03 }] },
+  //   const [data] = useState([]);
+  { segments: [{ w: 0.05, c: COLORS.gray }, { w: 0.22, c: COLORS.purple, gap: 0.02 }, { w: 0.25, c: COLORS.yellow, gap: 0.03 }, { w: 0.03, c: COLORS.gray, gap: 0.02 }, { w: 0.32, c: COLORS.blue, gap: 0.02 }] },
+  // pusta
+  { segments: [] },
+  //   useEffect(() => {
+  { segments: [{ w: 0.05, c: COLORS.gray }, { w: 0.35, c: COLORS.blue, gap: 0.02 }, { w: 0.25, c: COLORS.gray, gap: 0.02 }] },
+  //     fetchData().then(setData);
+  { segments: [{ w: 0.1, c: COLORS.gray }, { w: 0.38, c: COLORS.green, gap: 0.02 }, { w: 0.15, c: COLORS.gray, gap: 0.02 }, { w: 0.28, c: COLORS.yellow, gap: 0.02 }] },
+  //   }, []);
+  { segments: [{ w: 0.05, c: COLORS.gray }, { w: 0.2, c: COLORS.gray, gap: 0.02 }] },
+  // pusta
+  { segments: [] },
+  //   return (
+  { segments: [{ w: 0.05, c: COLORS.gray }, { w: 0.25, c: COLORS.purple, gap: 0.02 }, { w: 0.03, c: COLORS.gray, gap: 0.03 }] },
+  //     <div className="app">
+  { segments: [{ w: 0.1, c: COLORS.gray }, { w: 0.12, c: COLORS.red, gap: 0.02 }, { w: 0.38, c: COLORS.yellow, gap: 0.02 }, { w: 0.03, c: COLORS.red, gap: 0.02 }] },
+  //       {data.map(item => (
+  { segments: [{ w: 0.15, c: COLORS.gray }, { w: 0.15, c: COLORS.gray, gap: 0.02 }, { w: 0.12, c: COLORS.blue, gap: 0.02 }, { w: 0.22, c: COLORS.gray, gap: 0.02 }] },
+  //         <Card key={item.id} />
+  { segments: [{ w: 0.2, c: COLORS.gray }, { w: 0.18, c: COLORS.red, gap: 0.02 }, { w: 0.32, c: COLORS.yellow, gap: 0.02 }, { w: 0.08, c: COLORS.red, gap: 0.02 }] },
+  //       ))}
+  { segments: [{ w: 0.15, c: COLORS.gray }, { w: 0.12, c: COLORS.gray, gap: 0.02 }] },
+  //     </div>
+  { segments: [{ w: 0.1, c: COLORS.gray }, { w: 0.22, c: COLORS.red, gap: 0.02 }] },
+  //   );
+  { segments: [{ w: 0.05, c: COLORS.gray }, { w: 0.06, c: COLORS.gray, gap: 0.02 }] },
+  // }
+  { segments: [{ w: 0.03, c: COLORS.blue }] },
+];
+
+// Zlicz łączną liczbę segmentów
+const TOTAL_SEGMENTS = CODE_LINES.reduce((sum, line) => sum + Math.max(1, line.segments.length), 0);
+const TYPING_SPEED = 12; // segmentów na sekundę
+const PAUSE_DURATION = 3; // sekundy pauzy po napisaniu całości
+const CYCLE_DURATION = TOTAL_SEGMENTS / TYPING_SPEED + PAUSE_DURATION;
+
+// Animowane particle w tle
+function BackgroundParticles() {
+  const particlesRef = useRef<Group>(null);
+  
+  const particles = useMemo(() => {
+    return [...Array(30)].map(() => ({
+      x: (Math.random() - 0.5) * 6,
+      y: (Math.random() - 0.5) * 4,
+      z: -0.5 - Math.random() * 1,
+      speed: 0.3 + Math.random() * 0.4,
+      size: 0.03 + Math.random() * 0.04,
+      offset: Math.random() * Math.PI * 2,
+    }));
+  }, []);
+
+  useFrame((state) => {
+    if (particlesRef.current) {
+      const t = state.clock.elapsedTime;
+      particlesRef.current.children.forEach((child, i) => {
+        const p = particles[i];
+        if (p && child) {
+          child.position.y = p.y + Math.sin(t * p.speed + p.offset) * 0.3;
+          child.position.x = p.x + Math.cos(t * p.speed * 0.6 + p.offset) * 0.2;
+          const scale = p.size * (1 + Math.sin(t * 1.5 + p.offset) * 0.25);
+          child.scale.setScalar(scale);
+        }
+      });
+    }
+  });
+
+  return (
+    <group ref={particlesRef}>
+      {particles.map((p, i) => (
+        <mesh key={i} position={[p.x, p.y, p.z]}>
+          <sphereGeometry args={[1, 10, 10]} />
+          <meshStandardMaterial
+            color="#52F066"
+            emissive="#52F066"
+            emissiveIntensity={0.5}
+            transparent
+            opacity={0.6}
+          />
+        </mesh>
+      ))}
+    </group>
+  );
+}
+
+// Migający kursor - pozycja aktualizowana przez ref z InCodeScene
+function Cursor({ cursorRef }: { cursorRef: React.RefObject<Mesh | null> }) {
+  useFrame((state) => {
+    if (cursorRef.current) {
+      const blink = Math.sin(state.clock.elapsedTime * 5) > 0;
+      cursorRef.current.visible = blink;
+    }
+  });
+  
+  return (
+    <mesh ref={cursorRef} position={[-0.88, 0.48, 0.07]}>
+      <boxGeometry args={[0.015, 0.045, 0.008]} />
+      <meshStandardMaterial
+        color="#52F066"
+        emissive="#52F066"
+        emissiveIntensity={1}
+      />
+    </mesh>
+  );
+}
+
+// Komponent linii kodu - segmenty kontrolowane przez visibility w useFrame
+function AnimatedCodeLines({ segmentRefsMap, cursorRef }: { 
+  segmentRefsMap: React.MutableRefObject<Map<string, Mesh>>; 
+  cursorRef: React.RefObject<Mesh | null>;
+}) {
+  // Pre-oblicz pozycje wszystkich segmentów
+  const linesData = useMemo(() => {
+    return CODE_LINES.map((line, lineIdx) => {
+      const segments: { x: number; w: number; c: string }[] = [];
+      let xOffset = -0.9;
+      for (const seg of line.segments) {
+        if (seg.gap) xOffset += seg.gap;
+        segments.push({ x: xOffset + seg.w / 2, w: seg.w, c: seg.c });
+        xOffset += seg.w;
+      }
+      return { lineIdx, segments, endX: xOffset };
+    });
+  }, []);
+  
+  // Pre-oblicz indeksy startowe dla każdej linii
+  const lineStartIndices = useMemo(() => {
+    const indices: number[] = [];
+    let count = 0;
+    for (const line of CODE_LINES) {
+      indices.push(count);
+      count += Math.max(1, line.segments.length);
+    }
+    return indices;
+  }, []);
 
   useFrame((state) => {
     const t = state.clock.elapsedTime;
+    const cycleTime = t % CYCLE_DURATION;
+    const typingTime = Math.min(cycleTime, TOTAL_SEGMENTS / TYPING_SPEED);
+    const globalProgress = Math.floor(typingTime * TYPING_SPEED);
     
-    if (groupRef.current) {
-      groupRef.current.rotation.y = Math.sin(t * 0.15) * 0.15;
+    // Aktualizuj widoczność segmentów
+    let cursorLine = 0;
+    let cursorX = -0.88;
+    
+    for (let lineIdx = 0; lineIdx < CODE_LINES.length; lineIdx++) {
+      const line = CODE_LINES[lineIdx];
+      const lineStart = lineStartIndices[lineIdx];
+      const lineLength = Math.max(1, line.segments.length);
+      
+      // Ile segmentów pokazać na tej linii
+      const localProgress = globalProgress - lineStart;
+      const visibleCount = Math.max(0, Math.min(localProgress, line.segments.length));
+      
+      // Aktualizuj widoczność meshów
+      for (let segIdx = 0; segIdx < line.segments.length; segIdx++) {
+        const mesh = segmentRefsMap.current.get(`${lineIdx}-${segIdx}`);
+        if (mesh) {
+          mesh.visible = segIdx < visibleCount;
+        }
+      }
+      
+      // Aktualizuj pozycję kursora
+      if (globalProgress >= lineStart && globalProgress < lineStart + lineLength) {
+        cursorLine = lineIdx;
+        let xOffset = -0.9;
+        for (let i = 0; i < visibleCount && i < line.segments.length; i++) {
+          const seg = line.segments[i];
+          if (seg.gap) xOffset += seg.gap;
+          xOffset += seg.w;
+        }
+        cursorX = xOffset + 0.02;
+      }
     }
+    
+    // Aktualizuj kursor
+    if (cursorRef.current) {
+      cursorRef.current.position.set(cursorX, 0.48 - cursorLine * 0.065, 0.07);
+    }
+  });
 
-    if (terminalRef.current) {
-      terminalRef.current.rotation.y = Math.sin(t * 0.3) * 0.05;
+  return (
+    <group>
+      {linesData.map(({ lineIdx, segments }) => (
+        <group key={lineIdx}>
+          {/* Numer linii */}
+          <mesh position={[-1.0, 0.48 - lineIdx * 0.065, 0.06]}>
+            <boxGeometry args={[0.025, 0.025, 0.005]} />
+            <meshStandardMaterial color="#4a5568" transparent opacity={0.5} />
+          </mesh>
+          
+          {/* Segmenty kodu */}
+          {segments.map((seg, segIdx) => (
+            <mesh 
+              key={segIdx}
+              ref={(el) => {
+                if (el) segmentRefsMap.current.set(`${lineIdx}-${segIdx}`, el);
+              }}
+              position={[seg.x, 0.48 - lineIdx * 0.065, 0.06]}
+              visible={false}
+            >
+              <boxGeometry args={[seg.w, 0.038, 0.008]} />
+              <meshStandardMaterial
+                color={seg.c}
+                emissive={seg.c}
+                emissiveIntensity={0.4}
+                roughness={0.3}
+              />
+            </mesh>
+          ))}
+        </group>
+      ))}
+    </group>
+  );
+}
+
+export function InCodeScene() {
+  const groupRef = useRef<Group>(null);
+  const cursorRef = useRef<Mesh>(null);
+  const segmentRefsMap = useRef<Map<string, Mesh>>(new Map());
+
+  // Delikatna rotacja
+  useFrame((state) => {
+    if (groupRef.current) {
+      const t = state.clock.elapsedTime;
+      groupRef.current.rotation.y = Math.sin(t * 0.2) * 0.06;
+      groupRef.current.rotation.x = Math.sin(t * 0.15) * 0.02;
     }
   });
 
   return (
     <>
       {/* Oświetlenie */}
-      <ambientLight intensity={0.3} />
-      <directionalLight position={[5, 5, 5]} intensity={1.2} color="#ffffff" />
-      <pointLight position={[0, 2, 3]} intensity={1.2} color="#52F066" />
-      <pointLight position={[-3, -1, 2]} intensity={0.6} color="#3DD955" />
+      <ambientLight intensity={0.5} />
+      <directionalLight position={[5, 5, 5]} intensity={0.8} color="#ffffff" />
+      <pointLight position={[0, 0, 3]} intensity={0.5} color="#52F066" />
+
+      {/* Animowane particles w tle */}
+      <BackgroundParticles />
 
       <group ref={groupRef}>
         {/* Terminal 3D */}
-        <Float speed={1.2} rotationIntensity={0.1} floatIntensity={0.2}>
-          <group ref={terminalRef} position={[-0.8, 0, 0]}>
-            {/* Ramka terminala */}
-            <RoundedBox args={[2.2, 1.6, 0.15]} radius={0.08}>
-              <meshStandardMaterial color="#1a1a2e" roughness={0.8} metalness={0.3} />
-            </RoundedBox>
-            
-            {/* Ekran */}
-            <mesh position={[0, 0, 0.08]}>
-              <planeGeometry args={[2, 1.4]} />
-              <meshStandardMaterial 
-                color="#0d1117" 
-                roughness={0.9}
-                emissive="#0d1117"
-                emissiveIntensity={0.1}
-              />
-            </mesh>
+        <group position={[0, 0, 0]}>
+          {/* Ramka terminala */}
+          <RoundedBox args={[2.3, 1.5, 0.1]} radius={0.06}>
+            <meshStandardMaterial color="#1e1e2e" roughness={0.7} metalness={0.2} />
+          </RoundedBox>
+          
+          {/* Ekran */}
+          <mesh position={[0, -0.03, 0.055]}>
+            <planeGeometry args={[2.1, 1.28]} />
+            <meshStandardMaterial color="#0d1117" roughness={0.95} />
+          </mesh>
 
-            {/* Linie kodu */}
-            <group ref={codeRef} position={[-0.8, 0.5, 0.1]}>
-              {codeLines.map((line, i) => (
-                <Float key={i} speed={3} floatIntensity={0.05}>
-                  <mesh position={[line.width / 2, -i * 0.22, 0]}>
-                    <boxGeometry args={[line.width, 0.08, 0.02]} />
-                    <meshStandardMaterial
-                      color={line.color}
-                      emissive={line.color}
-                      emissiveIntensity={0.6}
-                      roughness={0.2}
-                    />
-                  </mesh>
-                </Float>
-              ))}
-            </group>
+          {/* Pasek tytułowy */}
+          <mesh position={[0, 0.65, 0.055]}>
+            <planeGeometry args={[2.1, 0.12]} />
+            <meshStandardMaterial color="#2d2d3d" roughness={0.9} />
+          </mesh>
 
-            {/* Kursor migający */}
-            <Float speed={8} floatIntensity={0.02}>
-              <mesh position={[-0.7, -0.55, 0.1]}>
-                <boxGeometry args={[0.08, 0.12, 0.02]} />
-                <meshStandardMaterial
-                  color="#52F066"
-                  emissive="#52F066"
-                  emissiveIntensity={1}
-                />
-              </mesh>
-            </Float>
-
-            {/* Przyciski okna */}
-            <group position={[-0.85, 0.7, 0.09]}>
-              <mesh position={[0, 0, 0]}>
-                <sphereGeometry args={[0.04, 16, 16]} />
-                <meshStandardMaterial color="#FF5F56" emissive="#FF5F56" emissiveIntensity={0.5} />
-              </mesh>
-              <mesh position={[0.12, 0, 0]}>
-                <sphereGeometry args={[0.04, 16, 16]} />
-                <meshStandardMaterial color="#FFBD2E" emissive="#FFBD2E" emissiveIntensity={0.5} />
-              </mesh>
-              <mesh position={[0.24, 0, 0]}>
-                <sphereGeometry args={[0.04, 16, 16]} />
-                <meshStandardMaterial color="#27CA40" emissive="#27CA40" emissiveIntensity={0.5} />
-              </mesh>
-            </group>
-          </group>
-        </Float>
-
-        {/* Symbol </> duży */}
-        <Float speed={1.5} rotationIntensity={0.2} floatIntensity={0.4}>
-          <group position={[2, 0.5, 0.5]} scale={0.8}>
-            {/* < */}
-            <mesh position={[-0.5, 0, 0]} rotation={[0, 0, 0]}>
-              <boxGeometry args={[0.1, 0.6, 0.1]} />
-              <meshStandardMaterial 
-                color="#52F066" 
-                emissive="#52F066"
-                emissiveIntensity={0.4}
-                roughness={0.2} 
-                metalness={0.8} 
-              />
+          {/* Przyciski okna */}
+          <group position={[-0.92, 0.65, 0.06]}>
+            <mesh position={[0, 0, 0]}>
+              <circleGeometry args={[0.025, 16]} />
+              <meshStandardMaterial color="#FF5F56" emissive="#FF5F56" emissiveIntensity={0.3} />
             </mesh>
-            <mesh position={[-0.7, 0.2, 0]} rotation={[0, 0, Math.PI / 4]}>
-              <boxGeometry args={[0.1, 0.5, 0.1]} />
-              <meshStandardMaterial 
-                color="#52F066" 
-                emissive="#52F066"
-                emissiveIntensity={0.4}
-                roughness={0.2} 
-                metalness={0.8} 
-              />
+            <mesh position={[0.07, 0, 0]}>
+              <circleGeometry args={[0.025, 16]} />
+              <meshStandardMaterial color="#FFBD2E" emissive="#FFBD2E" emissiveIntensity={0.3} />
             </mesh>
-            <mesh position={[-0.7, -0.2, 0]} rotation={[0, 0, -Math.PI / 4]}>
-              <boxGeometry args={[0.1, 0.5, 0.1]} />
-              <meshStandardMaterial 
-                color="#52F066" 
-                emissive="#52F066"
-                emissiveIntensity={0.4}
-                roughness={0.2} 
-                metalness={0.8} 
-              />
-            </mesh>
-
-            {/* / */}
-            <mesh position={[0, 0, 0]} rotation={[0, 0, -Math.PI / 6]}>
-              <boxGeometry args={[0.08, 0.9, 0.08]} />
-              <meshStandardMaterial 
-                color="#3DD955" 
-                emissive="#3DD955"
-                emissiveIntensity={0.5}
-                roughness={0.2} 
-                metalness={0.8} 
-              />
-            </mesh>
-
-            {/* > */}
-            <mesh position={[0.5, 0, 0]} rotation={[0, 0, 0]}>
-              <boxGeometry args={[0.1, 0.6, 0.1]} />
-              <meshStandardMaterial 
-                color="#52F066" 
-                emissive="#52F066"
-                emissiveIntensity={0.4}
-                roughness={0.2} 
-                metalness={0.8} 
-              />
-            </mesh>
-            <mesh position={[0.7, 0.2, 0]} rotation={[0, 0, -Math.PI / 4]}>
-              <boxGeometry args={[0.1, 0.5, 0.1]} />
-              <meshStandardMaterial 
-                color="#52F066" 
-                emissive="#52F066"
-                emissiveIntensity={0.4}
-                roughness={0.2} 
-                metalness={0.8} 
-              />
-            </mesh>
-            <mesh position={[0.7, -0.2, 0]} rotation={[0, 0, Math.PI / 4]}>
-              <boxGeometry args={[0.1, 0.5, 0.1]} />
-              <meshStandardMaterial 
-                color="#52F066" 
-                emissive="#52F066"
-                emissiveIntensity={0.4}
-                roughness={0.2} 
-                metalness={0.8} 
-              />
+            <mesh position={[0.14, 0, 0]}>
+              <circleGeometry args={[0.025, 16]} />
+              <meshStandardMaterial color="#27CA40" emissive="#27CA40" emissiveIntensity={0.3} />
             </mesh>
           </group>
-        </Float>
 
-        {/* Węzły architektury - połączone kulki */}
-        {nodes.map((node, i) => (
-          <Float key={i} speed={2 + i * 0.3} floatIntensity={0.3}>
-            <mesh position={node.pos}>
-              <sphereGeometry args={[0.15, 32, 32]} />
-              <meshStandardMaterial
-                color="#52F066"
-                emissive="#52F066"
-                emissiveIntensity={0.3}
-                roughness={0.2}
-                metalness={0.8}
-              />
-            </mesh>
-          </Float>
-        ))}
+          {/* Animowane linie kodu */}
+          <AnimatedCodeLines segmentRefsMap={segmentRefsMap} cursorRef={cursorRef} />
 
-        {/* Linie łączące węzły */}
-        <mesh position={[2.15, 0.5, 0.25]} rotation={[0, 0, -Math.PI / 4]}>
-          <cylinderGeometry args={[0.015, 0.015, 1.2, 8]} />
-          <meshStandardMaterial color="#3DD955" transparent opacity={0.6} />
-        </mesh>
-        <mesh position={[2.25, -0.5, 0.25]} rotation={[0, 0, Math.PI / 4]}>
-          <cylinderGeometry args={[0.015, 0.015, 1.2, 8]} />
-          <meshStandardMaterial color="#3DD955" transparent opacity={0.6} />
-        </mesh>
-
-        {/* Data particles */}
-        {[...Array(15)].map((_, i) => (
-          <Float key={i} speed={4 + i * 0.2} floatIntensity={0.8}>
-            <mesh
-              position={[
-                (Math.random() - 0.5) * 5,
-                (Math.random() - 0.5) * 3,
-                (Math.random() - 0.5) * 2,
-              ]}
-              scale={0.03 + Math.random() * 0.03}
-            >
-              <boxGeometry args={[1, 1, 1]} />
-              <meshStandardMaterial
-                color={i % 2 === 0 ? '#52F066' : '#3DD955'}
-                emissive={i % 2 === 0 ? '#52F066' : '#3DD955'}
-                emissiveIntensity={0.5}
-                transparent
-                opacity={0.7}
-              />
-            </mesh>
-          </Float>
-        ))}
+          {/* Kursor */}
+          <Cursor cursorRef={cursorRef} />
+        </group>
       </group>
     </>
   );

@@ -62,9 +62,9 @@ export function Button({
 
   // Size styles - responsywne z większymi tap targets na mobile
   const sizeStyles: Record<ButtonSize, string> = {
-    sm: 'px-4 py-2.5 text-sm gap-1.5 min-h-[40px]',
-    md: 'px-6 py-3 text-base gap-2 min-h-[48px]',
-    lg: 'px-8 py-4 text-lg gap-2.5 min-h-[56px]',
+    sm: 'px-3 sm:px-4 py-2 sm:py-2.5 text-xs sm:text-sm gap-1.5 min-h-[36px] sm:min-h-[40px]',
+    md: 'px-4 sm:px-6 py-2.5 sm:py-3 text-sm sm:text-base gap-2 min-h-[40px] sm:min-h-[48px]',
+    lg: 'px-6 sm:px-8 py-3 sm:py-4 text-base sm:text-lg gap-2.5 min-h-[48px] sm:min-h-[56px]',
   };
 
   const buttonClasses = cn(

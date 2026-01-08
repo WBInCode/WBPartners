@@ -7,7 +7,8 @@ import {
   ShoppingCart, Code2, Building2, Heart, 
   Truck, BarChart3, Smartphone, Cloud,
   Key, Calendar, Users, Lightbulb,
-  Globe, Package, Settings, Sparkles
+  Globe, Package, Settings, Sparkles,
+  FileCode, Server, Database, Container
 } from 'lucide-react';
 
 type ChipVariant = 'primary' | 'accent' | 'muted';
@@ -21,12 +22,19 @@ const CHIP_ICON_MAP: Record<string, LucideIcon> = {
   'Marketplace': Globe,
   'Logistyka': Truck,
   'Analytics': BarChart3,
-  // InCode
+  // InCode - technologie
   'Web Development': Code2,
   'Software': Code2,
   'Mobile Apps': Smartphone,
   'Cloud': Cloud,
   'DevOps': Settings,
+  'React': Code2,
+  'TypeScript': FileCode,
+  'Node.js': Server,
+  'Python': FileCode,
+  'AWS': Cloud,
+  'Docker': Container,
+  'Database': Database,
   // Rent
   'Nieruchomości': Building2,
   'Wynajem': Key,
