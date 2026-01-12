@@ -54,6 +54,8 @@ export function InCodeSection({ onNavigate }: InCodeSectionProps) {
             <Button 
               variant="primary"
               href="https://wb-incode.pl/"
+              target="_blank"
+              rel="noopener noreferrer"
               className="!bg-[var(--accent-incode)] hover:!opacity-90"
             >
               Przejdź
