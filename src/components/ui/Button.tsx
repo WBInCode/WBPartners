@@ -1,6 +1,5 @@
 import { motion } from 'framer-motion';
 import { cn } from '../../utils';
-import { useReducedMotionPreference } from '../../hooks/useAnimations';
 
 type ButtonVariant = 'primary' | 'secondary' | 'outline' | 'ghost';
 type ButtonSize = 'sm' | 'md' | 'lg';
@@ -22,6 +21,7 @@ interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
  * - Opcjonalna ikona (left/right)
  * - Loading state
  * - Accessibility
+ * - Animacje zawsze włączone
  */
 export function Button({
   variant = 'primary',
@@ -35,7 +35,6 @@ export function Button({
   className,
   ...props
 }: ButtonProps) {
-  const prefersReducedMotion = useReducedMotionPreference();
   // Variant styles
   const variantStyles: Record<ButtonVariant, string> = {
     primary: cn(
@@ -98,19 +97,8 @@ export function Button({
     </>
   );
 
-  // If href is provided, render as anchor
+  // If href is provided, render as anchor with animation
   if (href && !disabled && !loading) {
-    if (prefersReducedMotion) {
-      return (
-        <a
-          href={href}
-          className={buttonClasses}
-          aria-disabled={disabled}
-        >
-          {content}
-        </a>
-      );
-    }
     return (
       <motion.a
         href={href}
@@ -124,7 +112,8 @@ export function Button({
     );
   }
 
-  if (prefersReducedMotion || disabled || loading) {
+  // Disabled or loading - no animation
+  if (disabled || loading) {
     return (
       <button
         className={buttonClasses}
@@ -137,6 +126,7 @@ export function Button({
     );
   }
 
+  // Default - animated button
   return (
     <motion.button
       className={buttonClasses}

@@ -1,6 +1,6 @@
 import { motion } from 'framer-motion';
 import { cn } from '../../utils';
-import { fadeInUp, useReducedMotionPreference } from '../../hooks/useAnimations';
+import { fadeInUp } from '../../hooks/useAnimations';
 
 interface SectionHeaderProps {
   title: string;
@@ -32,29 +32,26 @@ export function SectionHeader({
   logoSrc,
   logoAlt,
 }: SectionHeaderProps) {
-  const prefersReducedMotion = useReducedMotionPreference();
-
-  const animationProps = prefersReducedMotion 
-    ? {} 
-    : {
-        initial: 'hidden',
-        whileInView: 'visible',
-        viewport: { once: true, amount: 0.5 },
-        variants: fadeInUp,
-      };
+  // Animacje zawsze włączone
+  const animationProps = {
+    initial: 'hidden',
+    whileInView: 'visible',
+    viewport: { once: true, amount: 0.1 },
+    variants: fadeInUp,
+  };
 
   return (
-    <div className={cn('mb-6 md:mb-8', className)}>
+    <div className={cn('mb-4 xs:mb-5 sm:mb-6 md:mb-8', className)}>
       {/* Logo - above title */}
       {logoSrc && (
         <motion.div
           {...animationProps}
-          className="mb-4 md:mb-6"
+          className="mb-3 xs:mb-4 md:mb-6"
         >
           <img 
             src={logoSrc} 
             alt={logoAlt || title} 
-            className="h-12 sm:h-14 md:h-20 lg:h-24 w-auto object-contain"
+            className="h-10 xs:h-12 sm:h-14 md:h-20 lg:h-24 w-auto object-contain mx-auto lg:mx-0"
           />
         </motion.div>
       )}
@@ -63,10 +60,11 @@ export function SectionHeader({
       <motion.h1
         {...animationProps}
         className={cn(
-          // Responsywna typografia
-          'text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl',
+          // Responsywna typografia - od bardzo małych do dużych ekranów
+          'text-xl xs:text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl',
           'font-bold',
-          'mb-2 md:mb-4'
+          'mb-1.5 xs:mb-2 md:mb-4',
+          'leading-tight'
         )}
         style={titleColor ? { color: titleColor } : { color: 'var(--wb-primary)' }}
       >
@@ -79,9 +77,10 @@ export function SectionHeader({
           {...animationProps}
           transition={{ delay: 0.1 }}
           className={cn(
-            'text-base sm:text-lg md:text-xl lg:text-2xl',
+            'text-sm xs:text-base sm:text-lg md:text-xl lg:text-2xl',
             'text-[var(--wb-secondary)]',
-            'mb-2 md:mb-4'
+            'mb-1.5 xs:mb-2 md:mb-4',
+            'leading-snug'
           )}
         >
           {subtitle}
@@ -94,9 +93,9 @@ export function SectionHeader({
           {...animationProps}
           transition={{ delay: 0.2 }}
           className={cn(
-            'text-sm sm:text-base md:text-lg',
+            'text-xs xs:text-sm sm:text-base md:text-lg',
             'text-gray-600',
-            'max-w-2xl',
+            'max-w-2xl mx-auto lg:mx-0',
             'leading-relaxed'
           )}
         >

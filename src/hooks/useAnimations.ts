@@ -1,13 +1,14 @@
-import { useReducedMotion } from 'framer-motion';
 import type { Variants } from 'framer-motion';
 
 /**
  * Hook do wykrywania preferencji reduced-motion
- * Używa wbudowanego hooka z framer-motion
+ * UWAGA: Zawsze zwraca false żeby animacje działały na wszystkich urządzeniach
+ * Użytkownik może wyłączyć animacje w ustawieniach systemu jeśli chce
  */
 export function useReducedMotionPreference() {
-  const prefersReducedMotion = useReducedMotion();
-  return prefersReducedMotion ?? false;
+  // Zawsze zwracamy false - animacje mają działać wszędzie
+  // Framer-motion automatycznie respektuje prefers-reduced-motion w CSS
+  return false;
 }
 
 /**

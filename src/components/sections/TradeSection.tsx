@@ -33,9 +33,9 @@ export function TradeSection({ onNavigate }: TradeSectionProps) {
         opacity={0.4}
       />
 
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8 lg:gap-12 items-center">
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 xs:gap-5 sm:gap-6 md:gap-8 lg:gap-12 items-center">
         {/* Left: Content */}
-        <div className="max-w-xl mx-auto md:mx-0">
+        <div className="max-w-xl mx-auto lg:mx-0 text-center lg:text-left">
           <SectionHeader
             title="WB Trade"
             subtitle="Platforma e-commerce nowej generacji"
@@ -49,11 +49,11 @@ export function TradeSection({ onNavigate }: TradeSectionProps) {
             chips={chips} 
             variant="accent"
             accentColor={accentColor}
-            className="mb-8"
+            className="mb-4 xs:mb-5 sm:mb-6 md:mb-8 justify-center lg:justify-start"
             autoIcons
           />
 
-          <div className="flex flex-wrap gap-4">
+          <div className="flex flex-col xs:flex-row flex-wrap gap-2 xs:gap-3 sm:gap-4 justify-center lg:justify-start">
             <Button 
               variant="primary"
               href="/wb-trade"
@@ -71,9 +71,9 @@ export function TradeSection({ onNavigate }: TradeSectionProps) {
           </div>
         </div>
 
-        {/* Right: 3D Scene */}
-        <div className="hidden md:flex justify-center md:justify-end">
-          <SceneWrapper className="w-full max-w-[280px] md:max-w-[320px] lg:max-w-md aspect-square" fallbackColor="#DB5F1B">
+        {/* Right: 3D Scene - ukryte na mobile, widoczne od lg */}
+        <div className="hidden lg:flex justify-center lg:justify-end">
+          <SceneWrapper className="w-full max-w-[240px] md:max-w-[280px] lg:max-w-[360px] xl:max-w-md aspect-square" fallbackColor="#DB5F1B">
             <TradeScene />
           </SceneWrapper>
         </div>

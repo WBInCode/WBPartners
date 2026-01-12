@@ -17,6 +17,7 @@ interface SectionProps {
  * - Responsywny padding dla wszystkich breakpointów
  * - Opcjonalny glow w kolorze akcentu
  * - Aria-label dla accessibility
+ * - Pełna responsywność od 320px do 2560px+
  */
 export function Section({
   id,
@@ -31,16 +32,19 @@ export function Section({
       id={id}
       aria-label={ariaLabel || id}
       className={cn(
-        // Base styles - fixed height dla snap scroll
-        'h-screen overflow-hidden snap-start',
+        // Base styles - responsive height for snap scroll
+        // Na bardzo małych urządzeniach używamy min-h zamiast h-screen dla bezpieczeństwa
+        'min-h-screen h-screen overflow-hidden snap-start',
         // Flex centering
         'flex items-center justify-center',
-        // Responsive padding: mobile (12px) → tablet (24px) → desktop (48px)
-        'px-3 sm:px-4 md:px-6 lg:px-10 xl:px-16',
+        // Responsive padding: xs (8px) → sm (12px) → md (16px) → lg (24px) → xl (40px) → 2xl (64px)
+        'px-2 xs:px-3 sm:px-4 md:px-6 lg:px-8 xl:px-10 2xl:px-16',
         // Dodatkowy padding po prawej dla scroll indicator na desktop
-        'lg:pr-16',
-        // Padding top dla sticky header - responsywny
-        'pt-16 sm:pt-18 md:pt-20 pb-4 sm:pb-6 md:pb-8',
+        'lg:pr-16 xl:pr-20',
+        // Padding top dla sticky header - responsywny (mniejszy na telefonach)
+        'pt-14 xs:pt-16 sm:pt-18 md:pt-20 lg:pt-24',
+        // Padding bottom - responsywny
+        'pb-2 xs:pb-3 sm:pb-4 md:pb-6 lg:pb-8',
         // Custom classes
         className
       )}
@@ -52,7 +56,7 @@ export function Section({
           : undefined
       }
     >
-      <div className="w-full max-w-7xl mx-auto">
+      <div className="w-full max-w-7xl mx-auto h-full flex flex-col justify-center">
         {children}
       </div>
     </section>

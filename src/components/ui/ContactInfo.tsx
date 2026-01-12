@@ -10,13 +10,13 @@ interface ContactItemProps {
 
 function ContactItem({ icon, label, value, href }: ContactItemProps) {
   const content = (
-    <div className="flex items-start gap-3">
-      <div className="flex-shrink-0 w-8 h-8 bg-[var(--wb-primary)]/10 rounded-lg flex items-center justify-center text-[var(--wb-primary)]">
+    <div className="flex items-start gap-2 xs:gap-3">
+      <div className="flex-shrink-0 w-6 h-6 xs:w-8 xs:h-8 bg-[var(--wb-primary)]/10 rounded-md xs:rounded-lg flex items-center justify-center text-[var(--wb-primary)]">
         {icon}
       </div>
-      <div>
-        <p className="text-xs text-gray-500">{label}</p>
-        <p className="font-medium text-gray-900 text-sm">{value}</p>
+      <div className="min-w-0 flex-1">
+        <p className="text-[10px] xs:text-xs text-gray-500">{label}</p>
+        <p className="font-medium text-gray-900 text-xs xs:text-sm break-words">{value}</p>
       </div>
     </div>
   );
@@ -46,19 +46,19 @@ export function ContactInfo() {
   return (
     <div
       className={cn(
-        'bg-white rounded-xl shadow-lg',
-        'p-4 sm:p-5',
+        'bg-white rounded-lg xs:rounded-xl shadow-lg',
+        'p-3 xs:p-4 sm:p-5',
         'w-full',
         'border border-gray-100',
         'card'
       )}
       data-card
     >
-      <h3 className="text-base sm:text-lg font-semibold text-gray-900 mb-4">
+      <h3 className="text-sm xs:text-base sm:text-lg font-semibold text-gray-900 mb-3 xs:mb-4">
         Informacje kontaktowe
       </h3>
 
-      <div className="space-y-2">
+      <div className="space-y-1.5 xs:space-y-2">
         {/* Email */}
         <ContactItem
           icon={<Mail className="w-4 h-4" />}

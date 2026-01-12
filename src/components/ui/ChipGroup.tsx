@@ -1,7 +1,7 @@
 import { motion } from 'framer-motion';
 import { cn } from '../../utils';
 import { Chip } from './Chip';
-import { staggerContainer, staggerItem, useReducedMotionPreference } from '../../hooks/useAnimations';
+import { staggerContainer, staggerItem } from '../../hooks/useAnimations';
 
 type ChipVariant = 'primary' | 'accent' | 'muted';
 type ChipSize = 'sm' | 'md';
@@ -19,7 +19,7 @@ interface ChipGroupProps {
  * - Flex wrap layout
  * - Gap między chipami
  * - Akceptuje tablicę stringów
- * - Staggered animation
+ * - Staggered animation - zawsze włączone
  */
 export function ChipGroup({
   chips,
@@ -28,31 +28,12 @@ export function ChipGroup({
   accentColor,
   className,
 }: ChipGroupProps) {
-  const prefersReducedMotion = useReducedMotionPreference();
-
-  if (prefersReducedMotion) {
-    return (
-      <div className={cn('flex flex-wrap gap-2 md:gap-3', className)}>
-        {chips.map((chip, index) => (
-          <Chip
-            key={`${chip}-${index}`}
-            variant={variant}
-            size={size}
-            accentColor={accentColor}
-          >
-            {chip}
-          </Chip>
-        ))}
-      </div>
-    );
-  }
-
   return (
     <motion.div
       className={cn('flex flex-wrap gap-2 md:gap-3', className)}
       initial="hidden"
       whileInView="visible"
-      viewport={{ once: true, amount: 0.5 }}
+      viewport={{ once: true, amount: 0.1 }}
       variants={staggerContainer}
     >
       {chips.map((chip, index) => (

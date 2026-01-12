@@ -1,6 +1,6 @@
 import { motion } from 'framer-motion';
 import { cn } from '../../utils';
-import { scaleIn, useReducedMotionPreference } from '../../hooks/useAnimations';
+import { scaleIn } from '../../hooks/useAnimations';
 
 type MockCardVariant = 'default' | 'trade' | 'incode' | 'rent' | 'foundation';
 
@@ -17,15 +17,13 @@ interface MockCardProps {
  * - Tło białe/jasne
  * - Placeholder content (linie, kółka)
  * - Warianty dla różnych sekcji
- * - Animacja scale + fade
+ * - Animacja scale + fade - zawsze włączona
  */
 export function MockCard({
   variant = 'default',
   accentColor,
   className,
 }: MockCardProps) {
-  const prefersReducedMotion = useReducedMotionPreference();
-
   // Get accent color based on variant
   const getAccentColor = (): string => {
     if (accentColor) return accentColor;
@@ -111,19 +109,11 @@ export function MockCard({
     className
   );
 
-  if (prefersReducedMotion) {
-    return (
-      <div className={cardClasses}>
-        {cardContent}
-      </div>
-    );
-  }
-
   return (
     <motion.div
       initial="hidden"
       whileInView="visible"
-      viewport={{ once: true, amount: 0.3 }}
+      viewport={{ once: true, amount: 0.1 }}
       variants={scaleIn}
       whileHover={{ scale: 1.02 }}
       transition={{ duration: 0.3 }}

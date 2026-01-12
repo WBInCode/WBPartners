@@ -181,7 +181,7 @@ export function ContactForm() {
   }
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-3">
+    <form onSubmit={handleSubmit} className="space-y-2 xs:space-y-3">
       {/* Honeypot field - hidden from users, catches bots */}
       <div className="absolute -left-[9999px]" aria-hidden="true">
         <input
@@ -195,7 +195,7 @@ export function ContactForm() {
       </div>
       
       {/* Imię i Email - 2 kolumny na tablet+ */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 xs:gap-3">
         {/* Imię */}
         <div>
           <label htmlFor="name" className="block text-sm font-medium text-gray-700 mb-1">

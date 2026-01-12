@@ -2,7 +2,7 @@ import { motion } from 'framer-motion';
 import type { LucideIcon } from 'lucide-react';
 import { cn } from '../../utils';
 import { AnimatedChip } from './AnimatedChip';
-import { staggerContainer, useReducedMotionPreference } from '../../hooks/useAnimations';
+import { staggerContainer } from '../../hooks/useAnimations';
 import { 
   ShoppingCart, Code2, Building2, Heart, 
   Truck, BarChart3, Smartphone, Cloud,
@@ -78,8 +78,6 @@ export function AnimatedChipGroup({
   className,
   autoIcons = true,
 }: AnimatedChipGroupProps) {
-  const prefersReducedMotion = useReducedMotionPreference();
-
   // Normalizacja chipów do formatu ChipData
   const normalizedChips: ChipData[] = chips.map((chip) => {
     if (typeof chip === 'string') {
@@ -91,30 +89,13 @@ export function AnimatedChipGroup({
     return chip;
   });
 
-  if (prefersReducedMotion) {
-    return (
-      <div className={cn('flex flex-wrap gap-2 md:gap-3', className)}>
-        {normalizedChips.map((chip, index) => (
-          <AnimatedChip
-            key={`${chip.label}-${index}`}
-            variant={variant}
-            size={size}
-            accentColor={accentColor}
-            icon={chip.icon && <chip.icon className="w-3.5 h-3.5" />}
-          >
-            {chip.label}
-          </AnimatedChip>
-        ))}
-      </div>
-    );
-  }
-
+  // Animacje zawsze włączone
   return (
     <motion.div
-      className={cn('flex flex-wrap gap-2 md:gap-3', className)}
+      className={cn('flex flex-wrap gap-1.5 xs:gap-2 md:gap-3', className)}
       initial="hidden"
       whileInView="visible"
-      viewport={{ once: true, amount: 0.5 }}
+      viewport={{ once: true, amount: 0.1 }}
       variants={staggerContainer}
     >
       {normalizedChips.map((chip, index) => (

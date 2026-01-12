@@ -1,6 +1,5 @@
 import { Suspense, type ReactNode } from 'react';
 import { Canvas } from '@react-three/fiber';
-import { useReducedMotionPreference } from '../../hooks/useAnimations';
 
 interface SceneWrapperProps {
   children: ReactNode;
@@ -14,28 +13,15 @@ interface SceneWrapperProps {
 /**
  * SceneWrapper - wrapper dla scen 3D
  * - Suspense z fallback
- * - Respektuje reduced-motion
  * - Lazy loading ready
  * - Canvas z podstawową konfiguracją
+ * - Animacje 3D zawsze włączone
  */
 export function SceneWrapper({
   children,
-  fallback,
   className = '',
   cameraPosition = [0, 0, 5],
-  fallbackColor,
 }: SceneWrapperProps) {
-  const prefersReducedMotion = useReducedMotionPreference();
-
-  // Fallback dla reduced motion lub słabych urządzeń
-  if (prefersReducedMotion) {
-    return (
-      <div className={`flex items-center justify-center ${className}`}>
-        {fallback || <DefaultFallback color={fallbackColor} />}
-      </div>
-    );
-  }
-
   return (
     <div className={className}>
       <Suspense fallback={<LoadingFallback />}>

@@ -57,7 +57,7 @@ export function AnimatedChip({
     <motion.span
       initial={{ opacity: 0, y: 10, scale: 0.9 }}
       whileInView={{ opacity: 1, y: 0, scale: 1 }}
-      viewport={{ once: true }}
+      viewport={{ once: true, amount: 0.1 }}
       transition={{ 
         duration: 0.4, 
         delay,

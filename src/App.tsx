@@ -35,7 +35,7 @@ function App() {
   }, [scrollToSection]);
 
   return (
-    <div className="h-screen overflow-y-scroll snap-y snap-mandatory bg-[var(--bg)]">
+    <div className="h-screen overflow-y-scroll snap-y snap-mandatory bg-[var(--bg)] overscroll-none touch-pan-y">
       {/* Skip to content link for accessibility */}
       <a 
         href="#intro" 

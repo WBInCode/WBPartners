@@ -2,7 +2,6 @@ import { memo, useCallback } from 'react';
 import { motion } from 'framer-motion';
 import { cn } from '../../utils';
 import { SECTIONS } from '../../constants/content';
-import { useReducedMotionPreference } from '../../hooks/useAnimations';
 
 interface ScrollIndicatorProps {
   activeSection?: string;
@@ -16,15 +15,12 @@ interface ScrollIndicatorProps {
  * - Centrowanie w pionie
  * - Z-index ponad sekcjami
  * - Ukryty na mobile
- * - Animacje: pulse na aktywnej, hover scale
- * - Respektuje prefers-reduced-motion
+ * - Animacje zawsze włączone
  */
 export const ScrollIndicator = memo(function ScrollIndicator({ 
   activeSection = 'intro',
   onDotClick 
 }: ScrollIndicatorProps) {
-  const prefersReducedMotion = useReducedMotionPreference();
-  
   const handleClick = useCallback((sectionId: string) => {
     onDotClick?.(sectionId);
   }, [onDotClick]);
@@ -50,9 +46,9 @@ export const ScrollIndicator = memo(function ScrollIndicator({
           onClick={() => handleClick(section.id)}
           aria-label={`Przejdź do sekcji ${section.title}`}
           title={section.title}
-          whileHover={prefersReducedMotion ? {} : { scale: 1.3 }}
-          whileTap={prefersReducedMotion ? {} : { scale: 0.9 }}
-          animate={!prefersReducedMotion && activeSection === section.id ? {
+          whileHover={{ scale: 1.3 }}
+          whileTap={{ scale: 0.9 }}
+          animate={activeSection === section.id ? {
             scale: [1, 1.2, 1],
             transition: { 
               duration: 2, 

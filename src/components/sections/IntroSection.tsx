@@ -33,9 +33,9 @@ export function IntroSection({ onNavigate }: IntroSectionProps) {
         opacity={0.3}
       />
 
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8 lg:gap-12 items-center">
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 xs:gap-5 sm:gap-6 md:gap-8 lg:gap-12 items-center">
         {/* Left: Content */}
-        <div className="max-w-xl mx-auto md:mx-0">
+        <div className="max-w-xl mx-auto lg:mx-0 text-center lg:text-left">
           <SectionHeader
             title="WB Partners"
             subtitle="Budujemy marki i projekty, które rosną."
@@ -47,11 +47,11 @@ export function IntroSection({ onNavigate }: IntroSectionProps) {
           <AnimatedChipGroup 
             chips={chips} 
             variant="primary"
-            className="mb-8"
+            className="mb-4 xs:mb-5 sm:mb-6 md:mb-8 justify-center lg:justify-start"
             autoIcons
           />
 
-          <div className="flex flex-wrap gap-4">
+          <div className="flex flex-col xs:flex-row flex-wrap gap-2 xs:gap-3 sm:gap-4 justify-center lg:justify-start">
             <Button 
               variant="primary"
               onClick={() => onNavigate?.('wb-trade')}
@@ -67,9 +67,9 @@ export function IntroSection({ onNavigate }: IntroSectionProps) {
           </div>
         </div>
 
-        {/* Right: 3D Scene */}
-        <div className="hidden md:block h-[300px] md:h-[350px] lg:h-[450px]">
-          <SceneWrapper className="w-full h-full max-w-[280px] md:max-w-[320px] lg:max-w-md mx-auto">
+        {/* Right: 3D Scene - ukryte na mobile, widoczne od lg */}
+        <div className="hidden lg:block h-[280px] md:h-[320px] lg:h-[400px] xl:h-[450px]">
+          <SceneWrapper className="w-full h-full max-w-[240px] md:max-w-[280px] lg:max-w-[360px] xl:max-w-md mx-auto">
             <IntroScene />
           </SceneWrapper>
         </div>
