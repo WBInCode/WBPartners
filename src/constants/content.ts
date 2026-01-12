@@ -58,7 +58,7 @@ export const SECTIONS: Section[] = [
     id: 'wb-rent',
     title: 'WB Rent',
     description:
-      'Nowoczesna platforma wynajmu nieruchomości i sprzętu. Digitalizujemy procesy najmu, oferując transparentność i wygodę dla obu stron.',
+      'Nowoczesna platforma wynajmu sprzętu. Digitalizujemy procesy najmu, oferując transparentność i wygodę dla obu stron.',
     chips: ['PropTech', 'Rental', 'SaaS', 'Automation', 'CRM'],
     accentColor: 'var(--accent-rent)',
     ctaPrimary: {

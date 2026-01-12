@@ -36,7 +36,7 @@ export function RentSection({ onNavigate }: RentSectionProps) {
           <SectionHeader
             title="WB Rent"
             subtitle="Inteligentna platforma wynajmu"
-            description="Nowoczesna platforma wynajmu nieruchomości i sprzętu z automatyzacją procesów. Upraszczamy zarządzanie i maksymalizujemy zyski."
+            description="Nowoczesna platforma wynajmu sprzętu z automatyzacją procesów. Upraszczamy zarządzanie i maksymalizujemy zyski."
             titleColor={accentColor}
             logoSrc={wbRentLogo}
             logoAlt="WB Rent Logo"

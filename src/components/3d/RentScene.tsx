@@ -29,15 +29,12 @@ const RENTAL_ITEMS = [
   { name: 'Serwer Dell', w: 0.35, color: COLORS.goldLight },
 ];
 
-// Konfiguracja animacji - wolniejsza, płynniejsza
-const ITEM_APPEAR_SPEED = 2; // elementów na sekundę (wolniej)
-const CHECK_DELAY = 0.4; // sekundy między zaznaczeniami
-const PAUSE_DURATION = 3; // pauza po zakończeniu
-const TOTAL_DURATION = (RENTAL_ITEMS.length / ITEM_APPEAR_SPEED) + (RENTAL_ITEMS.length * CHECK_DELAY) + PAUSE_DURATION;
+// Konfiguracja animacji
+const CYCLE_DURATION = 8; // sekund na pełen cykl
 
-// Easing function
-function easeOutCubic(x: number): number {
-  return 1 - Math.pow(1 - x, 3);
+// Easing functions
+function easeOutQuad(x: number): number {
+  return 1 - (1 - x) * (1 - x);
 }
 
 // Animowane particles w tle
@@ -95,56 +92,56 @@ function AnimatedRentalList() {
   
   useFrame((state) => {
     const t = state.clock.elapsedTime;
-    const cycleTime = t % TOTAL_DURATION;
+    const progress = (t % CYCLE_DURATION) / CYCLE_DURATION;
     
-    // Faza 1: Pojawianie się elementów z płynnym fade-in
-    const appearTime = RENTAL_ITEMS.length / ITEM_APPEAR_SPEED;
-    const rawVisibleCount = cycleTime * ITEM_APPEAR_SPEED;
-    const visibleCount = Math.min(RENTAL_ITEMS.length, Math.floor(rawVisibleCount));
+    // Fazy animacji:
+    // 0.00 - 0.50: Elementy pojawiają się jeden po drugim
+    // 0.50 - 0.75: Checkboxy zaznaczają się
+    // 0.75 - 0.92: Pauza
+    // 0.92 - 1.00: Reset
     
-    // Faza 2: Zaznaczanie checkboxów (po pojawieniu się wszystkich)
-    const checkStartTime = appearTime + 0.3; // mała pauza przed checkboxami
-    const checksVisible = cycleTime > checkStartTime 
-      ? Math.min(RENTAL_ITEMS.length, Math.floor((cycleTime - checkStartTime) / CHECK_DELAY))
-      : 0;
-    
-    // Aktualizuj widoczność i animacje
     for (let i = 0; i < RENTAL_ITEMS.length; i++) {
       const row = itemRefs.current.get(`row-${i}`);
+      const check = itemRefs.current.get(`check-${i}`);
+      
       if (row) {
-        const shouldBeVisible = i < visibleCount;
-        row.visible = shouldBeVisible || i === visibleCount;
+        // Każdy element pojawia się w swoim czasie
+        const itemAppearStart = (i / RENTAL_ITEMS.length) * 0.45;
+        const itemAppearEnd = itemAppearStart + 0.06;
         
-        // Płynne pojawianie się
-        if (i === visibleCount && rawVisibleCount > i) {
-          const progress = easeOutCubic(rawVisibleCount - i);
-          row.scale.setScalar(progress);
-          row.position.x = (1 - progress) * 0.1; // slide in od prawej
-        } else if (shouldBeVisible) {
-          row.scale.setScalar(1);
+        if (progress < itemAppearStart) {
+          row.visible = false;
+        } else if (progress < itemAppearEnd) {
+          // Płynne wejście
+          row.visible = true;
+          const slideProgress = easeOutQuad((progress - itemAppearStart) / (itemAppearEnd - itemAppearStart));
+          row.position.x = (1 - slideProgress) * -0.2;
+          row.scale.setScalar(0.8 + slideProgress * 0.2);
+        } else if (progress < 0.92) {
+          row.visible = true;
           row.position.x = 0;
+          row.scale.setScalar(1);
+        } else {
+          row.visible = false;
         }
       }
       
-      // Widoczność checkboxa z animacją
-      const check = itemRefs.current.get(`check-${i}`);
       if (check) {
-        const shouldCheck = i < checksVisible;
-        check.visible = shouldCheck;
+        // Checkboxy pojawiają się po elementach
+        const checkStart = 0.52 + (i / RENTAL_ITEMS.length) * 0.18;
         
-        // Animacja "pop" przy zaznaczeniu
-        if (shouldCheck) {
-          const checkIndex = i;
-          const checkTime = checkStartTime + checkIndex * CHECK_DELAY;
-          const timeSinceCheck = cycleTime - checkTime;
-          
-          if (timeSinceCheck < 0.15) {
-            const popProgress = timeSinceCheck / 0.15;
-            const pop = 1 + Math.sin(popProgress * Math.PI) * 0.3;
+        if (progress >= checkStart && progress < 0.92) {
+          check.visible = true;
+          const checkAge = progress - checkStart;
+          if (checkAge < 0.02) {
+            // Pop effect
+            const pop = 1 + Math.sin((checkAge / 0.02) * Math.PI) * 0.4;
             check.scale.setScalar(pop);
           } else {
             check.scale.setScalar(1);
           }
+        } else {
+          check.visible = false;
         }
       }
     }
@@ -247,8 +244,8 @@ export function RentScene() {
           </mesh>
 
           {/* Pasek tytułowy */}
-          <mesh position={[0, 0.6, 0.055]}>
-            <planeGeometry args={[2.1, 0.12]} />
+          <mesh position={[0, 0.6, 0.058]}>
+            <boxGeometry args={[2.1, 0.12, 0.01]} />
             <meshStandardMaterial color={COLORS.goldDark} roughness={0.5} />
           </mesh>
 
