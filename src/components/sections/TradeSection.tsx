@@ -56,7 +56,9 @@ export function TradeSection({ onNavigate }: TradeSectionProps) {
           <div className="flex flex-col xs:flex-row flex-wrap gap-2 xs:gap-3 sm:gap-4 justify-center lg:justify-start">
             <Button 
               variant="primary"
-              href="/wb-trade"
+              href="https://www.wb-trade.pl/"
+              target="_blank"
+              rel="noopener noreferrer"
               className="!bg-[var(--accent-trade)] hover:!opacity-90"
             >
               Przejdź
