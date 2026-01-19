@@ -14,8 +14,9 @@ export function ThemeToggle({ className }: ThemeToggleProps) {
             onClick={toggleTheme}
             className={cn(
                 'p-2 rounded-lg transition-colors duration-200',
-                'hover:bg-gray-100 dark:hover:bg-gray-800',
-                'text-gray-600 dark:text-gray-300',
+                'bg-gray-100 dark:bg-gray-800',
+                'hover:bg-gray-200 dark:hover:bg-gray-700',
+                'text-gray-900 dark:text-gray-100',
                 'focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--wb-primary)]',
                 className
             )}
