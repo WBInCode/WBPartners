@@ -252,7 +252,7 @@ export function ContactForm() {
               value={formData.email}
               onChange={handleChange}
               onBlur={handleBlur}
-              placeholder="twoj@email.com"
+              placeholder="Twój@email.com"
               className={cn(inputClasses, 'pl-11', errors.email && errorInputClasses)}
             />
           </div>
