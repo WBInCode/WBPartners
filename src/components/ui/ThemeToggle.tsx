@@ -14,6 +14,7 @@ export function ThemeToggle({ className }: ThemeToggleProps) {
             onClick={toggleTheme}
             className={cn(
                 'p-2 rounded-lg transition-colors duration-200',
+                'flex items-center justify-center',
                 'bg-gray-100 dark:bg-gray-800',
                 'hover:bg-gray-200 dark:hover:bg-gray-700',
                 'text-gray-900 dark:text-gray-100',

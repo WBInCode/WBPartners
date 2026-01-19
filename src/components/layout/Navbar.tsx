@@ -215,7 +215,9 @@ export function Navbar({ activeSection = 'intro' }: NavbarProps) {
             <div className="flex justify-between items-center px-6 py-3">
               <div className="w-12" /> {/* Spacer */}
               <div className="w-12 h-1.5 bg-gray-300 dark:bg-gray-600 rounded-full" />
-              <ThemeToggle className="w-12 flex justify-end" />
+              <div className="w-12 flex justify-end">
+                <ThemeToggle />
+              </div>
             </div>
 
             <div className="flex flex-col p-3 xs:p-4 sm:p-6 pt-1 xs:pt-2 gap-1.5 xs:gap-2">
