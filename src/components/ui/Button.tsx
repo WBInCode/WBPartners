@@ -140,6 +140,7 @@ export function Button({
       aria-busy={loading}
       whileHover={{ scale: 1.02 }}
       whileTap={{ scale: 0.98 }}
+      {...props}
     >
       {content}
     </motion.button>

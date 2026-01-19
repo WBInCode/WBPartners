@@ -5,6 +5,7 @@ import { NAV_LINKS } from '../../constants/content';
 import { useScrollToSection } from '../../hooks/useScrollToSection';
 import { useSwipeDown } from '../../hooks/useSwipeDown';
 import { Logo } from '../ui/Logo';
+import { ThemeToggle } from '../ui/ThemeToggle';
 
 interface NavbarProps {
   activeSection?: string;
@@ -27,7 +28,7 @@ export function Navbar({ activeSection = 'intro' }: NavbarProps) {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
   const scrollToSection = useScrollToSection();
-  
+
   // Swipe down to close menu
   const closeMenu = useCallback(() => setIsMenuOpen(false), []);
   const { offsetY, handlers: swipeHandlers } = useSwipeDown({
@@ -77,9 +78,9 @@ export function Navbar({ activeSection = 'intro' }: NavbarProps) {
           // Responsive height - mniejszy na małych telefonach
           'h-14 xs:h-16 sm:h-[72px]',
           // Enhanced glassmorphism background
-          'bg-white/70 backdrop-blur-xl backdrop-saturate-150',
+          'bg-[var(--bg-card)]/80 backdrop-blur-xl backdrop-saturate-150',
           // Border - subtle
-          'border-b border-white/20',
+          'border-b border-[var(--border)]',
           // Z-index
           'z-50',
           // Flex layout
@@ -142,6 +143,9 @@ export function Navbar({ activeSection = 'intro' }: NavbarProps) {
               </a>
             );
           })}
+
+          <div className="w-px h-6 bg-gray-200 dark:bg-gray-700 mx-2" />
+          <ThemeToggle />
         </nav>
 
         {/* Hamburger Button (mobile) */}
@@ -194,24 +198,26 @@ export function Navbar({ activeSection = 'intro' }: NavbarProps) {
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -20 }}
             transition={{ duration: 0.3, ease: 'easeOut' }}
-            style={{ 
+            style={{
               transform: offsetY > 0 ? `translateY(${offsetY}px)` : undefined,
               opacity: offsetY > 0 ? 1 - (offsetY / 150) : 1,
             }}
             className={cn(
               'fixed top-14 xs:top-16 sm:top-[72px] left-0 right-0 bottom-0',
-              'bg-white/95 backdrop-blur-xl z-40 lg:hidden',
+              'bg-[var(--bg-card)]/95 backdrop-blur-xl z-40 lg:hidden',
               'overflow-y-auto',
               'touch-pan-y',
               'safe-area-bottom'
             )}
             {...swipeHandlers}
           >
-            {/* Swipe indicator */}
-            <div className="flex justify-center py-3">
-              <div className="w-12 h-1.5 bg-gray-300 rounded-full" />
+            {/* Swipe indicator and Theme Toggle */}
+            <div className="flex justify-between items-center px-6 py-3">
+              <div className="w-12" /> {/* Spacer */}
+              <div className="w-12 h-1.5 bg-gray-300 dark:bg-gray-600 rounded-full" />
+              <ThemeToggle className="w-12 flex justify-end" />
             </div>
-            
+
             <div className="flex flex-col p-3 xs:p-4 sm:p-6 pt-1 xs:pt-2 gap-1.5 xs:gap-2">
               {NAV_LINKS.map((link, index) => {
                 const isActive = activeSection === link.sectionId;
@@ -229,14 +235,14 @@ export function Navbar({ activeSection = 'intro' }: NavbarProps) {
                       'flex items-center gap-2 xs:gap-3',
                       isActive
                         ? 'text-white shadow-lg'
-                        : 'text-gray-700 hover:bg-gray-100 active:scale-98'
+                        : 'text-[var(--text)] hover:bg-[var(--bg-muted)] active:scale-98'
                     )}
                     style={isActive ? { backgroundColor: link.accentColor } : undefined}
                   >
                     {/* Colored dot indicator */}
-                    <span 
+                    <span
                       className="w-3 h-3 rounded-full"
-                      style={{ 
+                      style={{
                         backgroundColor: isActive ? 'white' : link.accentColor,
                         opacity: isActive ? 1 : 0.6
                       }}
@@ -246,9 +252,9 @@ export function Navbar({ activeSection = 'intro' }: NavbarProps) {
                 );
               })}
             </div>
-            
+
             {/* Footer w mobile menu */}
-            <motion.div 
+            <motion.div
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               transition={{ delay: 0.4 }}

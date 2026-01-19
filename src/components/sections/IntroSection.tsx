@@ -20,15 +20,20 @@ interface IntroSectionProps {
  * - Layout grid: tekst po lewej, scena 3D po prawej
  * - Statystyki animowane
  */
+import { useNavigate } from 'react-router-dom';
+
+// ...
+
 export function IntroSection({ onNavigate }: IntroSectionProps) {
+  const navigate = useNavigate();
   const chips = ['Software', 'E-commerce', 'Usługi', 'Inicjatywy'];
 
   return (
     <Section id="intro" ariaLabel="Strona główna WB Partners" className="section-intro section-bg relative">
       {/* Animated background */}
-      <AnimatedBackground 
-        variant="mesh" 
-        primaryColor="var(--wb-primary)" 
+      <AnimatedBackground
+        variant="mesh"
+        primaryColor="var(--wb-primary)"
         secondaryColor="var(--wb-secondary)"
         opacity={0.3}
       />
@@ -44,23 +49,28 @@ export function IntroSection({ onNavigate }: IntroSectionProps) {
             logoAlt="WB Partners Logo"
           />
 
-          <AnimatedChipGroup 
-            chips={chips} 
+          <AnimatedChipGroup
+            chips={chips}
             variant="primary"
             className="mb-4 xs:mb-5 sm:mb-6 md:mb-8 justify-center lg:justify-start"
             autoIcons
           />
 
           <div className="flex flex-col xs:flex-row flex-wrap gap-2 xs:gap-3 sm:gap-4 justify-center lg:justify-start">
-            <Button 
+            <Button
               variant="primary"
-              onClick={() => onNavigate?.('wb-trade')}
+              onClick={() => navigate('/projekty')}
             >
               Poznaj projekty
             </Button>
-            <Button 
+            <Button
               variant="outline"
-              onClick={() => onNavigate?.('kontakt')}
+              onClick={() => {
+                const contactSection = document.getElementById('kontakt');
+                if (contactSection) {
+                  contactSection.scrollIntoView({ behavior: 'smooth' });
+                }
+              }}
             >
               Kontakt
             </Button>
