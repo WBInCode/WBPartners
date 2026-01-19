@@ -1,0 +1,900 @@
+@import "tailwindcss";
+
+/* ========================================
+   TAILWIND V4 CUSTOM THEME - BREAKPOINTS
+   ======================================== */
+@theme {
+  /* Responsive breakpoints for all devices */
+  --breakpoint-xs: 375px;   /* Small phones (iPhone SE, etc.) */
+  --breakpoint-sm: 640px;   /* Large phones / Small tablets */
+  --breakpoint-md: 768px;   /* Tablets */
+  --breakpoint-lg: 1024px;  /* Small laptops / Large tablets */
+  --breakpoint-xl: 1280px;  /* Desktops */
+  --breakpoint-2xl: 1536px; /* Large desktops */
+  --breakpoint-3xl: 1920px; /* Extra large screens */
+}
+
+/* ========================================
+   CSS VARIABLES - WB PARTNERS COLOR SYSTEM
+   ======================================== */
+
+:root {
+  /* Primary Brand Colors */
+  --wb-primary: #0A457B;
+  --wb-primary-light: #1A5A94;
+  --wb-primary-dark: #063456;
+  --wb-secondary: #2A679D;
+  --wb-secondary-light: #3B7DB8;
+  --wb-accent: #4A78AB;
+  
+  /* Background & Text */
+  --bg: #F7FAFF;
+  --bg-alt: #EEF4FF;
+  --bg-muted: #E8F0FB;
+  --text: #0B1220;
+  --text-muted: #4A5568;
+  --text-light: #718096;
+  
+  /* Neutral Palette */
+  --neutral-50: #F9FAFB;
+  --neutral-100: #F3F4F6;
+  --neutral-200: #E5E7EB;
+  --neutral-300: #D1D5DB;
+  --neutral-400: #9CA3AF;
+  --neutral-500: #6B7280;
+  --neutral-600: #4B5563;
+  --neutral-700: #374151;
+  --neutral-800: #1F2937;
+  --neutral-900: #111827;
+
+  /* Section Accent Colors */
+  --accent-trade: #DB5F1B;
+  --accent-trade-light: #E87A3D;
+  --accent-trade-dark: #B84D15;
+  
+  --accent-incode: #52F066;
+  --accent-incode-light: #7AF58A;
+  --accent-incode-dark: #3DD851;
+  
+  --accent-rent: #D6AF5B;
+  --accent-rent-light: #E0C37E;
+  --accent-rent-dark: #C49A3F;
+  
+  --accent-foundation: #8FD2E9;
+  --accent-foundation-light: #B0E2F2;
+  --accent-foundation-dark: #6AC0DE;
+  
+  /* Gradients */
+  --gradient-primary: linear-gradient(135deg, var(--wb-primary) 0%, var(--wb-secondary) 100%);
+  --gradient-intro: linear-gradient(135deg, #F7FAFF 0%, #E8F0FB 50%, #DFE9F8 100%);
+  --gradient-trade: linear-gradient(135deg, rgba(219, 95, 27, 0.05) 0%, rgba(219, 95, 27, 0.02) 100%);
+  --gradient-incode: linear-gradient(135deg, rgba(82, 240, 102, 0.05) 0%, rgba(82, 240, 102, 0.02) 100%);
+  --gradient-rent: linear-gradient(135deg, rgba(214, 175, 91, 0.05) 0%, rgba(214, 175, 91, 0.02) 100%);
+  --gradient-foundation: linear-gradient(135deg, rgba(143, 210, 233, 0.05) 0%, rgba(143, 210, 233, 0.02) 100%);
+  --gradient-contact: linear-gradient(180deg, var(--bg) 0%, var(--bg-muted) 100%);
+  
+  /* Shadows */
+  --shadow-sm: 0 1px 2px 0 rgba(10, 69, 123, 0.05);
+  --shadow-md: 0 4px 6px -1px rgba(10, 69, 123, 0.1), 0 2px 4px -1px rgba(10, 69, 123, 0.06);
+  --shadow-lg: 0 10px 15px -3px rgba(10, 69, 123, 0.1), 0 4px 6px -2px rgba(10, 69, 123, 0.05);
+  --shadow-xl: 0 20px 25px -5px rgba(10, 69, 123, 0.1), 0 10px 10px -5px rgba(10, 69, 123, 0.04);
+  
+  /* Border Radius */
+  --radius-sm: 0.375rem;
+  --radius-md: 0.5rem;
+  --radius-lg: 0.75rem;
+  --radius-xl: 1rem;
+  --radius-2xl: 1.5rem;
+  
+  /* Spacing Scale (based on 4px grid) */
+  --space-1: 0.25rem;   /* 4px */
+  --space-2: 0.5rem;    /* 8px */
+  --space-3: 0.75rem;   /* 12px */
+  --space-4: 1rem;      /* 16px */
+  --space-5: 1.25rem;   /* 20px */
+  --space-6: 1.5rem;    /* 24px */
+  --space-8: 2rem;      /* 32px */
+  --space-10: 2.5rem;   /* 40px */
+  --space-12: 3rem;     /* 48px */
+  --space-16: 4rem;     /* 64px */
+  --space-20: 5rem;     /* 80px */
+  --space-24: 6rem;     /* 96px */
+  
+  /* Component Spacing */
+  --content-gap: var(--space-8);         /* Gap between content blocks */
+  --section-gap: var(--space-12);        /* Gap between sections */
+  --card-padding: var(--space-6);        /* Card internal padding */
+  --button-padding-x: var(--space-6);    /* Button horizontal padding */
+  --button-padding-y: var(--space-3);    /* Button vertical padding */
+  --input-padding-x: var(--space-4);     /* Input horizontal padding */
+  --input-padding-y: var(--space-3);     /* Input vertical padding */
+  
+  /* Typography Scale */
+  --text-xs: 0.75rem;      /* 12px */
+  --text-sm: 0.875rem;     /* 14px */
+  --text-base: 1rem;       /* 16px */
+  --text-lg: 1.125rem;     /* 18px */
+  --text-xl: 1.25rem;      /* 20px */
+  --text-2xl: 1.5rem;      /* 24px */
+  --text-3xl: 1.875rem;    /* 30px */
+  --text-4xl: 2.25rem;     /* 36px */
+  --text-5xl: 3rem;        /* 48px */
+  
+  /* Transitions */
+  --transition-fast: 150ms ease;
+  --transition-normal: 250ms ease;
+  --transition-slow: 350ms ease;
+  --transition-spring: 400ms cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+body {
+  margin: 0;
+  font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  background-color: var(--bg);
+  color: var(--text);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  /* Lepszy line-height i letter-spacing */
+  line-height: 1.6;
+  letter-spacing: -0.01em;
+}
+
+/* ========================================
+   RESPONSIVENESS & ACCESSIBILITY
+   ======================================== */
+
+/* Touch device optimization */
+@media (hover: none) and (pointer: coarse) {
+  /* Larger touch targets */
+  button,
+  a,
+  [role="button"] {
+    min-height: 44px;
+    min-width: 44px;
+  }
+  
+  /* Remove hover effects on touch */
+  .hover\:scale-125:hover {
+    transform: none;
+  }
+}
+
+/* Reduced motion preference */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* Focus visible styling */
+:focus-visible {
+  outline: 2px solid var(--wb-primary);
+  outline-offset: 2px;
+}
+
+/* Skip to content link for screen readers */
+.skip-link {
+  position: absolute;
+  top: -40px;
+  left: 0;
+  background: var(--wb-primary);
+  color: white;
+  padding: 8px 16px;
+  z-index: 100;
+  transition: top 0.3s;
+}
+
+.skip-link:focus {
+  top: 0;
+}
+
+/* High contrast mode support */
+@media (prefers-contrast: high) {
+  :root {
+    --wb-primary: #003366;
+    --wb-secondary: #004080;
+    --text: #000000;
+    --bg: #ffffff;
+  }
+  
+  button,
+  a {
+    border: 2px solid currentColor;
+  }
+}
+
+/* Print styles */
+@media print {
+  .no-print,
+  nav,
+  .scroll-indicator {
+    display: none !important;
+  }
+  
+  body {
+    background: white;
+    color: black;
+  }
+  
+  section {
+    page-break-inside: avoid;
+    break-inside: avoid;
+  }
+}
+
+/* ========================================
+   SCROLL SNAP ENHANCEMENTS
+   ======================================== */
+
+/* Scroll snap identyczny na wszystkich urządzeniach */
+.snap-y {
+  scroll-snap-type: y mandatory !important;
+  -webkit-overflow-scrolling: touch;
+}
+
+.snap-start {
+  scroll-snap-align: start !important;
+  scroll-snap-stop: always;
+}
+
+/* Smooth scrolling for all browsers */
+html {
+  scroll-behavior: smooth;
+}
+
+/* Fix dla iOS Safari - scroll container */
+@supports (-webkit-touch-callout: none) {
+  .snap-y {
+    scroll-snap-type: y mandatory !important;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+}
+
+/* ========================================
+   RESPONSIVE TYPOGRAPHY
+   ======================================== */
+
+/* Extra Small Mobile (320px - 374px) */
+html {
+  font-size: 13px;
+}
+
+/* Small Mobile (375px - 424px) - iPhone SE, standard phones */
+@media (min-width: 375px) {
+  html {
+    font-size: 14px;
+  }
+}
+
+/* Medium Mobile (425px - 639px) - larger phones */
+@media (min-width: 425px) {
+  html {
+    font-size: 14.5px;
+  }
+}
+
+/* Small Tablet / Large Mobile (640px - 767px) */
+@media (min-width: 640px) {
+  html {
+    font-size: 15px;
+  }
+}
+
+/* Tablet (768px - 1023px) */
+@media (min-width: 768px) {
+  html {
+    font-size: 15px;
+  }
+}
+
+/* Desktop (1024px - 1439px) */
+@media (min-width: 1024px) {
+  html {
+    font-size: 16px;
+  }
+}
+
+/* Large Desktop (1440px+) */
+@media (min-width: 1440px) {
+  html {
+    font-size: 17px;
+  }
+}
+
+/* Extra Large Desktop (1920px+) */
+@media (min-width: 1920px) {
+  html {
+    font-size: 18px;
+  }
+}
+
+/* ========================================
+   RESPONSIVE CONTAINERS
+   ======================================== */
+
+/* Max-width container */
+.container-max {
+  max-width: 100%;
+  margin: 0 auto;
+  padding-left: 1rem;
+  padding-right: 1rem;
+}
+
+@media (min-width: 768px) {
+  .container-max {
+    padding-left: 2rem;
+    padding-right: 2rem;
+  }
+}
+
+@media (min-width: 1024px) {
+  .container-max {
+    padding-left: 3rem;
+    padding-right: 3rem;
+  }
+}
+
+@media (min-width: 1440px) {
+  .container-max {
+    max-width: 1440px;
+    padding-left: 4rem;
+    padding-right: 4rem;
+  }
+}
+
+/* ========================================
+   RESPONSIVE SECTION SPACING
+   ======================================== */
+
+/* Section padding - mobile first */
+.section-padding {
+  padding: 4rem 1rem;
+}
+
+@media (min-width: 768px) {
+  .section-padding {
+    padding: 5rem 2rem;
+  }
+}
+
+@media (min-width: 1024px) {
+  .section-padding {
+    padding: 6rem 3rem;
+  }
+}
+
+/* ========================================
+   MOBILE OPTIMIZATIONS
+   ======================================== */
+
+/* Full-width buttons on mobile */
+@media (max-width: 639px) {
+  .btn-mobile-full {
+    width: 100%;
+    justify-content: center;
+  }
+}
+
+/* Stack layout helper */
+@media (max-width: 1023px) {
+  .mobile-stack {
+    flex-direction: column !important;
+  }
+  
+  .mobile-stack > * {
+    width: 100% !important;
+  }
+}
+
+/* Hide on mobile, show on desktop */
+.desktop-only {
+  display: none;
+}
+
+@media (min-width: 1024px) {
+  .desktop-only {
+    display: block;
+  }
+}
+
+/* Show on mobile, hide on desktop */
+.mobile-only {
+  display: block;
+}
+
+@media (min-width: 1024px) {
+  .mobile-only {
+    display: none;
+  }
+}
+
+/* Tablet only (768px - 1023px) */
+.tablet-only {
+  display: none;
+}
+
+@media (min-width: 768px) and (max-width: 1023px) {
+  .tablet-only {
+    display: block;
+  }
+}
+
+/* Small mobile only (under 375px) */
+.xs-mobile-only {
+  display: block;
+}
+
+@media (min-width: 375px) {
+  .xs-mobile-only {
+    display: none;
+  }
+}
+
+/* ========================================
+   MOBILE-FIRST RESPONSIVE UTILITIES
+   ======================================== */
+
+/* Safe area padding for notched devices (iPhone X+) */
+@supports (padding-top: env(safe-area-inset-top)) {
+  .safe-area-top {
+    padding-top: env(safe-area-inset-top);
+  }
+  
+  .safe-area-bottom {
+    padding-bottom: env(safe-area-inset-bottom);
+  }
+  
+  .safe-area-left {
+    padding-left: env(safe-area-inset-left);
+  }
+  
+  .safe-area-right {
+    padding-right: env(safe-area-inset-right);
+  }
+}
+
+/* Responsive text utilities */
+.text-responsive-sm {
+  font-size: clamp(0.75rem, 2vw, 0.875rem);
+}
+
+.text-responsive-base {
+  font-size: clamp(0.875rem, 2.5vw, 1rem);
+}
+
+.text-responsive-lg {
+  font-size: clamp(1rem, 3vw, 1.25rem);
+}
+
+.text-responsive-xl {
+  font-size: clamp(1.25rem, 4vw, 1.5rem);
+}
+
+.text-responsive-2xl {
+  font-size: clamp(1.5rem, 5vw, 2rem);
+}
+
+.text-responsive-3xl {
+  font-size: clamp(1.75rem, 6vw, 2.5rem);
+}
+
+.text-responsive-4xl {
+  font-size: clamp(2rem, 7vw, 3rem);
+}
+
+/* Responsive spacing utilities */
+.gap-responsive {
+  gap: clamp(0.5rem, 2vw, 1.5rem);
+}
+
+.p-responsive {
+  padding: clamp(0.75rem, 3vw, 2rem);
+}
+
+.px-responsive {
+  padding-left: clamp(0.75rem, 3vw, 2rem);
+  padding-right: clamp(0.75rem, 3vw, 2rem);
+}
+
+.py-responsive {
+  padding-top: clamp(0.5rem, 2vw, 1.5rem);
+  padding-bottom: clamp(0.5rem, 2vw, 1.5rem);
+}
+
+/* Landscape phone orientation - zachowuj snap ale dostosuj padding */
+@media (max-height: 500px) and (orientation: landscape) {
+  /* Reduce padding in landscape */
+  .section-padding {
+    padding-top: 2rem;
+    padding-bottom: 2rem;
+  }
+}
+
+/* Very small height screens (foldables, small phones) */
+@media (max-height: 600px) {
+  section {
+    padding-top: 4rem;
+    padding-bottom: 2rem;
+  }
+}
+
+/* Extra small width devices */
+@media (max-width: 359px) {
+  html {
+    font-size: 12px;
+  }
+  
+  .container-max {
+    padding-left: 0.5rem;
+    padding-right: 0.5rem;
+  }
+}
+
+/* ========================================
+   RETINA / HiDPI DISPLAYS
+   ======================================== */
+
+/* High DPI display optimizations */
+@media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
+  /* Sharper borders and shadows */
+  :root {
+    --shadow-sm: 0 1px 2px 0 rgba(10, 69, 123, 0.08);
+    --shadow-md: 0 4px 6px -1px rgba(10, 69, 123, 0.12), 0 2px 4px -1px rgba(10, 69, 123, 0.08);
+    --shadow-lg: 0 10px 15px -3px rgba(10, 69, 123, 0.12), 0 4px 6px -2px rgba(10, 69, 123, 0.07);
+    --shadow-xl: 0 20px 25px -5px rgba(10, 69, 123, 0.12), 0 10px 10px -5px rgba(10, 69, 123, 0.06);
+  }
+  
+  /* Crisp text rendering */
+  body {
+    -webkit-font-smoothing: subpixel-antialiased;
+    text-rendering: optimizeLegibility;
+  }
+  
+  /* Thinner borders on HiDPI */
+  .border,
+  [class*="border-"] {
+    border-width: 0.5px;
+  }
+  
+  /* Sharper icons */
+  svg {
+    shape-rendering: geometricPrecision;
+  }
+  
+  /* Better image quality */
+  img {
+    image-rendering: -webkit-optimize-contrast;
+  }
+}
+
+/* 3x pixel density (iPhone Pro, etc.) */
+@media (-webkit-min-device-pixel-ratio: 3), (min-resolution: 288dpi) {
+  /* Even crisper rendering */
+  body {
+    -webkit-font-smoothing: antialiased;
+  }
+  
+  /* Ultra-thin borders */
+  .border-thin {
+    border-width: 0.33px;
+  }
+}
+
+/* Dark mode preference for HiDPI OLED screens */
+@media (-webkit-min-device-pixel-ratio: 2) and (prefers-color-scheme: dark) {
+  /* Slightly reduce contrast to prevent OLED burn-in on bright elements */
+  .bg-white {
+    background-color: #fafafa;
+  }
+}
+
+/* ========================================
+   3D SCENE RESPONSIVENESS
+   ======================================== */
+
+/* 3D scenes hidden on small mobile, replaced with fallback */
+@media (max-width: 767px) {
+  .scene-3d-container {
+    display: none;
+  }
+  
+  .scene-fallback {
+    display: flex;
+  }
+}
+
+@media (min-width: 768px) {
+  .scene-3d-container {
+    display: block;
+  }
+  
+  .scene-fallback {
+    display: none;
+  }
+}
+
+/* Reduced 3D quality on tablet */
+@media (min-width: 768px) and (max-width: 1023px) {
+  .scene-3d-container canvas {
+    image-rendering: optimizeSpeed;
+  }
+}
+
+/* ========================================
+   SECTION GRADIENT BACKGROUNDS
+   ======================================== */
+
+/* Base section style with subtle pattern */
+.section-bg {
+  position: relative;
+}
+
+.section-bg::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image: radial-gradient(circle at 25% 25%, rgba(10, 69, 123, 0.02) 1px, transparent 1px);
+  background-size: 50px 50px;
+  pointer-events: none;
+  opacity: 0.5;
+}
+
+/* Intro section gradient */
+.section-intro {
+  background: var(--gradient-intro);
+}
+
+/* Trade section subtle gradient */
+.section-trade {
+  background: var(--gradient-trade);
+  position: relative;
+}
+
+.section-trade::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 40%;
+  height: 100%;
+  background: radial-gradient(ellipse at right center, rgba(219, 95, 27, 0.08) 0%, transparent 70%);
+  pointer-events: none;
+}
+
+/* InCode section subtle gradient */
+.section-incode {
+  background: var(--gradient-incode);
+  position: relative;
+}
+
+.section-incode::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 40%;
+  height: 100%;
+  background: radial-gradient(ellipse at right center, rgba(82, 240, 102, 0.06) 0%, transparent 70%);
+  pointer-events: none;
+}
+
+/* Rent section subtle gradient */
+.section-rent {
+  background: var(--gradient-rent);
+  position: relative;
+}
+
+.section-rent::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 40%;
+  height: 100%;
+  background: radial-gradient(ellipse at right center, rgba(214, 175, 91, 0.08) 0%, transparent 70%);
+  pointer-events: none;
+}
+
+/* Foundation section subtle gradient */
+.section-foundation {
+  background: var(--gradient-foundation);
+  position: relative;
+}
+
+.section-foundation::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 40%;
+  height: 100%;
+  background: radial-gradient(ellipse at right center, rgba(143, 210, 233, 0.08) 0%, transparent 70%);
+  pointer-events: none;
+}
+
+/* Contact section gradient */
+.section-contact {
+  background: var(--gradient-contact);
+}
+
+/* ========================================
+   MICROINTERACTIONS & ANIMATIONS
+   ======================================== */
+
+/* Button enhanced states */
+button:not(:disabled),
+.btn,
+[role="button"]:not(:disabled) {
+  transition: 
+    transform var(--transition-fast),
+    box-shadow var(--transition-fast),
+    background-color var(--transition-fast),
+    border-color var(--transition-fast);
+}
+
+button:not(:disabled):active,
+.btn:active,
+[role="button"]:not(:disabled):active {
+  transform: scale(0.97);
+}
+
+/* Input focus animations */
+input:not([type="checkbox"]):not([type="radio"]),
+textarea,
+select {
+  transition: 
+    border-color var(--transition-fast),
+    box-shadow var(--transition-fast),
+    background-color var(--transition-fast);
+}
+
+input:not([type="checkbox"]):not([type="radio"]):focus,
+textarea:focus,
+select:focus {
+  border-color: var(--wb-primary);
+  box-shadow: 0 0 0 3px rgba(10, 69, 123, 0.15);
+  outline: none;
+}
+
+/* Input placeholder animation */
+input::placeholder,
+textarea::placeholder {
+  transition: opacity var(--transition-fast), transform var(--transition-fast);
+}
+
+input:focus::placeholder,
+textarea:focus::placeholder {
+  opacity: 0.5;
+  transform: translateX(4px);
+}
+
+/* Card hover lift effect */
+.card,
+[data-card] {
+  transition: 
+    transform var(--transition-normal),
+    box-shadow var(--transition-normal);
+}
+
+.card:hover,
+[data-card]:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-lg);
+}
+
+/* Link underline animation */
+.link-animated {
+  position: relative;
+  text-decoration: none;
+}
+
+.link-animated::after {
+  content: '';
+  position: absolute;
+  bottom: -2px;
+  left: 0;
+  width: 0;
+  height: 2px;
+  background: currentColor;
+  transition: width var(--transition-normal);
+}
+
+.link-animated:hover::after {
+  width: 100%;
+}
+
+/* Chip hover effect */
+.chip {
+  transition: 
+    transform var(--transition-fast),
+    background-color var(--transition-fast),
+    box-shadow var(--transition-fast);
+}
+
+.chip:hover {
+  transform: translateY(-2px);
+}
+
+/* Success animation */
+@keyframes success-pulse {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.1); }
+  100% { transform: scale(1); }
+}
+
+.animate-success {
+  animation: success-pulse 0.4s ease-out;
+}
+
+/* Shake animation for errors */
+@keyframes shake {
+  0%, 100% { transform: translateX(0); }
+  20%, 60% { transform: translateX(-4px); }
+  40%, 80% { transform: translateX(4px); }
+}
+
+.animate-shake {
+  animation: shake 0.4s ease-out;
+}
+
+/* Skeleton loading */
+.skeleton {
+  background: linear-gradient(
+    90deg,
+    var(--neutral-200) 25%,
+    var(--neutral-100) 50%,
+    var(--neutral-200) 75%
+  );
+  background-size: 200% 100%;
+  animation: skeleton-loading 1.5s infinite;
+}
+
+@keyframes skeleton-loading {
+  0% { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}
+
+/* Fade in animation */
+@keyframes fade-in {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.animate-fade-in {
+  animation: fade-in 0.3s ease-out;
+}
+
+/* Pulse animation for loading states */
+@keyframes pulse-glow {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.6; }
+}
+
+.animate-pulse-glow {
+  animation: pulse-glow 2s ease-in-out infinite;
+}
+
+/* Spinner animation */
+.spinner {
+  width: 1.5rem;
+  height: 1.5rem;
+  border: 2px solid var(--neutral-200);
+  border-top-color: var(--wb-primary);
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
