@@ -5,10 +5,7 @@ import { Button } from '../ui/Button';
 import { AnimatedBackground } from '../ui/AnimatedBackground';
 import { SceneWrapper, IntroScene } from '../3d';
 import wbPartnersLogo from '../../assets/wb-partners-logo.png';
-
-interface IntroSectionProps {
-  onNavigate?: (sectionId: string) => void;
-}
+import { useNavigate } from 'react-router-dom';
 
 /**
  * Sekcja Intro
@@ -20,11 +17,8 @@ interface IntroSectionProps {
  * - Layout grid: tekst po lewej, scena 3D po prawej
  * - Statystyki animowane
  */
-import { useNavigate } from 'react-router-dom';
 
-// ...
-
-export function IntroSection({ onNavigate }: IntroSectionProps) {
+export function IntroSection() {
   const navigate = useNavigate();
   const chips = ['Software', 'E-commerce', 'Usługi', 'Inicjatywy'];
 

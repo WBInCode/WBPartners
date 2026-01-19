@@ -51,7 +51,7 @@ export function HomePage() {
       <BackToTop />
 
       <main id="main-content" role="main">
-        <IntroSection onNavigate={handleNavigate} />
+        <IntroSection />
         <TradeSection onNavigate={handleNavigate} />
         <InCodeSection onNavigate={handleNavigate} />
         <RentSection onNavigate={handleNavigate} />
