@@ -39,8 +39,8 @@ export const ContactSection = memo(function ContactSection() {
             viewport={{ once: true, amount: 0.1 }}
             transition={{ duration: 0.6, delay: 0.2 }}
           >
-            <div className="bg-white rounded-lg xs:rounded-xl shadow-lg p-2.5 xs:p-3 sm:p-4 md:p-5 border border-gray-100 dark:bg-white dark:text-gray-900 text-gray-900 isolate">
-              <h3 className="text-sm xs:text-base md:text-lg font-semibold text-gray-900 mb-2 xs:mb-3 md:mb-4">Wyślij wiadomość</h3>
+            <div className="bg-[var(--bg-card)] rounded-lg xs:rounded-xl shadow-lg p-2.5 xs:p-3 sm:p-4 md:p-5 border border-[var(--border)] text-[var(--text)] transition-colors duration-200">
+              <h3 className="text-sm xs:text-base md:text-lg font-semibold text-[var(--text)] mb-2 xs:mb-3 md:mb-4">Wyślij wiadomość</h3>
               <ContactForm />
             </div>
           </motion.div>

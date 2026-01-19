@@ -174,9 +174,9 @@ export function ContactForm() {
 
   const inputClasses = cn(
     'w-full px-3 py-2 rounded-lg',
-    'border border-gray-300',
-    'bg-white',
-    'text-gray-900 placeholder-gray-500 text-sm',
+    'border border-[var(--border)]',
+    'bg-[var(--bg)]',
+    'text-[var(--text)] placeholder-[var(--text-light)] text-sm',
     'transition-all duration-200',
     'focus:outline-none focus:ring-2 focus:ring-[var(--wb-primary)] focus:border-transparent'
   );
@@ -217,11 +217,11 @@ export function ContactForm() {
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 xs:gap-3">
         {/* Imię */}
         <div>
-          <label htmlFor="name" className="block text-sm font-medium text-gray-700 mb-1">
+          <label htmlFor="name" className="block text-sm font-medium text-[var(--text)] mb-1">
             Imię
           </label>
           <div className="relative">
-            <User className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400 pointer-events-none" />
+            <User className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-[var(--text-light)] pointer-events-none" />
             <input
               type="text"
               id="name"
@@ -240,11 +240,11 @@ export function ContactForm() {
 
         {/* Email */}
         <div>
-          <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-1">
+          <label htmlFor="email" className="block text-sm font-medium text-[var(--text)] mb-1">
             Email
           </label>
           <div className="relative">
-            <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400 pointer-events-none" />
+            <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-[var(--text-light)] pointer-events-none" />
             <input
               type="email"
               id="email"
@@ -264,11 +264,11 @@ export function ContactForm() {
 
       {/* Temat */}
       <div>
-        <label htmlFor="subject" className="block text-sm font-medium text-gray-700 mb-1">
+        <label htmlFor="subject" className="block text-sm font-medium text-[var(--text)] mb-1">
           Temat
         </label>
         <div className="relative">
-          <FileText className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400 pointer-events-none" />
+          <FileText className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-[var(--text-light)] pointer-events-none" />
           <input
             type="text"
             id="subject"
@@ -287,11 +287,11 @@ export function ContactForm() {
 
       {/* Wiadomość */}
       <div>
-        <label htmlFor="message" className="block text-sm font-medium text-gray-700 mb-1">
+        <label htmlFor="message" className="block text-sm font-medium text-[var(--text)] mb-1">
           Wiadomość
         </label>
         <div className="relative">
-          <MessageSquare className="absolute left-3 top-3 w-4 h-4 text-gray-400 pointer-events-none" />
+          <MessageSquare className="absolute left-3 top-3 w-4 h-4 text-[var(--text-light)] pointer-events-none" />
           <textarea
             id="message"
             name="message"

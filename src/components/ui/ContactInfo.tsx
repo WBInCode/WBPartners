@@ -15,8 +15,8 @@ function ContactItem({ icon, label, value, href }: ContactItemProps) {
         {icon}
       </div>
       <div className="min-w-0 flex-1">
-        <p className="text-[10px] xs:text-xs text-gray-500">{label}</p>
-        <p className="font-medium text-gray-900 text-xs xs:text-sm break-words">{value}</p>
+        <p className="text-[10px] xs:text-xs text-[var(--text-muted)]">{label}</p>
+        <p className="font-medium text-[var(--text)] text-xs xs:text-sm break-words">{value}</p>
       </div>
     </div>
   );
@@ -25,7 +25,7 @@ function ContactItem({ icon, label, value, href }: ContactItemProps) {
     return (
       <a
         href={href}
-        className="block hover:bg-gray-50 -mx-3 px-3 py-1.5 rounded-lg transition-colors link-animated"
+        className="block hover:bg-[var(--bg-muted)] -mx-3 px-3 py-1.5 rounded-lg transition-colors link-animated"
       >
         {content}
       </a>
@@ -46,16 +46,17 @@ export function ContactInfo() {
   return (
     <div
       className={cn(
-        'bg-white rounded-lg xs:rounded-xl shadow-lg',
+        'bg-[var(--bg-card)] rounded-lg xs:rounded-xl shadow-lg',
         'p-3 xs:p-4 sm:p-5',
         'w-full',
-        'border border-gray-100',
-        'text-gray-900 dark:bg-white dark:text-gray-900 isolate', // Force light theme colors
+        'border border-[var(--border)]',
+        'text-[var(--text)]',
+        'transition-colors duration-200',
         'card'
       )}
       data-card
     >
-      <h3 className="text-sm xs:text-base sm:text-lg font-semibold text-gray-900 mb-3 xs:mb-4">
+      <h3 className="text-sm xs:text-base sm:text-lg font-semibold text-[var(--text)] mb-3 xs:mb-4">
         Informacje kontaktowe
       </h3>
 

@@ -19,6 +19,9 @@
    ======================================== */
 
 :root {
+  /* Supported Color Schemes */
+  color-scheme: light dark;
+
   /* Primary Brand Colors */
   --wb-primary: #0A457B;
   --wb-primary-light: #1A5A94;
@@ -27,13 +30,15 @@
   --wb-secondary-light: #3B7DB8;
   --wb-accent: #4A78AB;
   
-  /* Background & Text */
+  /* Background & Text (Light Mode Default) */
   --bg: #F7FAFF;
   --bg-alt: #EEF4FF;
   --bg-muted: #E8F0FB;
+  --bg-card: #FFFFFF;
   --text: #0B1220;
   --text-muted: #4A5568;
   --text-light: #718096;
+  --border: #E5E7EB;
   
   /* Neutral Palette */
   --neutral-50: #F9FAFB;
@@ -46,6 +51,37 @@
   --neutral-700: #374151;
   --neutral-800: #1F2937;
   --neutral-900: #111827;
+
+  /* ... existing colors ... */
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    /* Dark Mode Overrides */
+    --bg: #0B1120;           /* Very dark blue/slate */
+    --bg-alt: #111827;       /* Dark gray/slate */
+    --bg-muted: #1E293B;     /* Slightly lighter slate */
+    --bg-card: #1E293B;      /* Card background */
+    --text: #F8FAFC;         /* White/Off-white */
+    --text-muted: #94A3B8;   /* Light gray */
+    --text-light: #64748B;   /* Slate gray */
+    --border: #334155;       /* Dark border */
+    
+    /* Adjust primary colors for better visibility on dark */
+    --wb-primary: #3B82F6;       /* Brighter blue */
+    --wb-primary-light: #60A5FA;
+    --wb-primary-dark: #2563EB;
+    
+    /* Adjust gradients for dark mode */
+    --gradient-intro: linear-gradient(135deg, #0B1120 0%, #111827 100%);
+    --gradient-contact: linear-gradient(180deg, #0B1120 0%, #111827 100%);
+    
+    /* Shadows - gentler on dark */
+    --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.3);
+    --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.3);
+    --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.3);
+  }
+}
 
   /* Section Accent Colors */
   --accent-trade: #DB5F1B;
