@@ -31,28 +31,29 @@ export function Section({
     <section
       id={id}
       aria-label={ariaLabel || id}
+      data-theme="light" // Hint for some css logic
       className={cn(
         // Base styles - responsive height for snap scroll
-        // Na bardzo małych urządzeniach używamy min-h zamiast h-screen dla bezpieczeństwa
-        'min-h-screen h-screen overflow-hidden snap-start',
-        // Flex centering
-        'flex items-center justify-center',
+        // Używamy min-h-screen zamiast h-screen, aby treść nie była ucinana na mobile
+        'min-h-screen w-full relative snap-start',
+        // Flex centering - ale z możliwością scrollowania na mobile
+        'flex flex-col justify-center',
         // Responsive padding: xs (8px) → sm (12px) → md (16px) → lg (24px) → xl (40px) → 2xl (64px)
         'px-2 xs:px-3 sm:px-4 md:px-6 lg:px-8 xl:px-10 2xl:px-16',
         // Dodatkowy padding po prawej dla scroll indicator na desktop
         'lg:pr-16 xl:pr-20',
         // Padding top dla sticky header - responsywny (mniejszy na telefonach)
-        'pt-14 xs:pt-16 sm:pt-18 md:pt-20 lg:pt-24',
+        'pt-20 xs:pt-24 sm:pt-28 md:pt-32 lg:pt-24', // Większy top padding na mobile bo navbar
         // Padding bottom - responsywny
-        'pb-2 xs:pb-3 sm:pb-4 md:pb-6 lg:pb-8',
+        'pb-16 xs:pb-16 sm:pb-12 md:pb-12 lg:pb-8', // Większy bottom padding na mobile
         // Custom classes
         className
       )}
       style={
         withGlow && accentColor
           ? {
-              background: `radial-gradient(ellipse 80% 50% at 80% 50%, ${accentColor}15 0%, transparent 70%)`,
-            }
+            background: `radial-gradient(ellipse 80% 50% at 80% 50%, ${accentColor}15 0%, transparent 70%)`,
+          }
           : undefined
       }
     >

@@ -23,8 +23,8 @@ function ContactItem({ icon, label, value, href }: ContactItemProps) {
 
   if (href) {
     return (
-      <a 
-        href={href} 
+      <a
+        href={href}
         className="block hover:bg-gray-50 -mx-3 px-3 py-1.5 rounded-lg transition-colors link-animated"
       >
         {content}
@@ -50,6 +50,7 @@ export function ContactInfo() {
         'p-3 xs:p-4 sm:p-5',
         'w-full',
         'border border-gray-100',
+        'text-gray-900 dark:bg-white dark:text-gray-900 isolate', // Force light theme colors
         'card'
       )}
       data-card
