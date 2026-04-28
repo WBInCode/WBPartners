@@ -68,7 +68,6 @@ export function Footer() {
               <BrandLink name="WB Trade" description="E-commerce" color="var(--accent-trade)" />
               <BrandLink name="WB InCode" description="Software house" color="var(--accent-incode)" />
               <BrandLink name="WB Rent" description="Wynajem" color="var(--accent-rent)" />
-              <BrandLink name="WB Foundation" description="Inicjatywy społeczne" color="var(--accent-foundation)" />
             </ul>
           </div>
 

@@ -69,24 +69,6 @@ export const SECTIONS: Section[] = [
       isScroll: false,
     },
     ctaSecondary: {
-      label: 'Następna sekcja',
-      href: '#wb-foundation',
-      isScroll: true,
-    },
-  },
-  {
-    id: 'wb-foundation',
-    title: 'WB Foundation',
-    description:
-      'Inicjatywy społeczne i edukacyjne wspierające rozwój lokalnych społeczności. Inwestujemy w ludzi i projekty, które mają pozytywny wpływ.',
-    chips: ['CSR', 'Edukacja', 'Społeczność', 'Mentoring', 'Granty'],
-    accentColor: 'var(--accent-foundation)',
-    ctaPrimary: {
-      label: 'Przejdź',
-      href: '/wb-foundation',
-      isScroll: false,
-    },
-    ctaSecondary: {
       label: 'Kontakt',
       href: '#kontakt',
       isScroll: true,
@@ -106,7 +88,6 @@ export const NAV_LINKS: NavLink[] = [
   { label: 'WB Trade', href: '#wb-trade', sectionId: 'wb-trade', accentColor: 'var(--accent-trade)' },
   { label: 'WB InCode', href: '#wb-incode', sectionId: 'wb-incode', accentColor: 'var(--accent-incode)' },
   { label: 'WB Rent', href: '#wb-rent', sectionId: 'wb-rent', accentColor: 'var(--accent-rent)' },
-  { label: 'WB Foundation', href: '#wb-foundation', sectionId: 'wb-foundation', accentColor: 'var(--accent-foundation)' },
   { label: 'Kontakt', href: '#kontakt', sectionId: 'kontakt', accentColor: 'var(--wb-primary)' },
 ];
 

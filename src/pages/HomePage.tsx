@@ -13,7 +13,6 @@ import { IntroSection } from '../components/sections/IntroSection'
 import { TradeSection } from '../components/sections/TradeSection'
 import { InCodeSection } from '../components/sections/InCodeSection'
 import { RentSection } from '../components/sections/RentSection'
-import { FoundationSection } from '../components/sections/FoundationSection'
 import { ContactSection } from '../components/sections/ContactSection'
 
 export function HomePage() {
@@ -55,7 +54,6 @@ export function HomePage() {
         <TradeSection onNavigate={handleNavigate} />
         <InCodeSection onNavigate={handleNavigate} />
         <RentSection onNavigate={handleNavigate} />
-        <FoundationSection onNavigate={handleNavigate} />
         <ContactSection />
       </main>
 
